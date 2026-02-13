@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#042f2e"/>
+      <stop offset="50%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#134e4a"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="50%" cy="45%" r="40%">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="sweep" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5eead4" stop-opacity="0.25"/>
+      <stop offset="60%" stop-color="#5eead4" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="b"><feGaussianBlur stdDeviation="40"/></filter>
+    <filter id="glow"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <circle cx="300" cy="200" r="120" fill="#14b8a6" opacity="0.12" filter="url(#b)"/>
+  <circle cx="1300" cy="700" r="140" fill="#2dd4bf" opacity="0.08" filter="url(#b)"/>
+  <!-- Radar circles -->
+  <circle cx="800" cy="400" r="200" fill="none" stroke="white" stroke-width="1" opacity="0.12"/>
+  <circle cx="800" cy="400" r="150" fill="none" stroke="white" stroke-width="1" opacity="0.1"/>
+  <circle cx="800" cy="400" r="100" fill="none" stroke="white" stroke-width="1" opacity="0.08"/>
+  <circle cx="800" cy="400" r="50" fill="none" stroke="white" stroke-width="1" opacity="0.06"/>
+  <!-- Cross lines -->
+  <line x1="800" y1="190" x2="800" y2="610" stroke="white" stroke-width="1" opacity="0.08"/>
+  <line x1="590" y1="400" x2="1010" y2="400" stroke="white" stroke-width="1" opacity="0.08"/>
+  <!-- Sweep sector -->
+  <path d="M800,400 L800,200 A200,200 0 0,1 973,300 Z" fill="url(#sweep)"/>
+  <!-- Blips -->
+  <circle cx="860" cy="320" r="6" fill="#5eead4" opacity="0.9" filter="url(#glow)"/>
+  <circle cx="860" cy="320" r="6" fill="#5eead4" opacity="0.9"/>
+  <circle cx="730" cy="460" r="5" fill="#5eead4" opacity="0.6"/>
+  <circle cx="900" cy="430" r="4" fill="#5eead4" opacity="0.4"/>
+  <circle cx="770" cy="310" r="4" fill="#5eead4" opacity="0.5"/>
+  <!-- Center -->
+  <circle cx="800" cy="400" r="8" fill="white" opacity="0.8"/>
+  <circle cx="800" cy="400" r="3" fill="#0d9488"/>
+  <text x="800" y="800" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-size="28" font-weight="500" opacity="0.6" letter-spacing="4">RADAR VAGAS</text>
+</svg>

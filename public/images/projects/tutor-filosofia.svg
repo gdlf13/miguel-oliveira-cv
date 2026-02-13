@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a0533"/>
+      <stop offset="50%" stop-color="#581c87"/>
+      <stop offset="100%" stop-color="#3b0764"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="30%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="75%" cy="70%" r="35%">
+      <stop offset="0%" stop-color="#c084fc" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="b"><feGaussianBlur stdDeviation="40"/></filter>
+    <filter id="glow"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <rect width="1600" height="900" fill="url(#g2)"/>
+  <circle cx="350" cy="300" r="140" fill="#7c3aed" opacity="0.12" filter="url(#b)"/>
+  <circle cx="1200" cy="550" r="160" fill="#a855f7" opacity="0.1" filter="url(#b)"/>
+  <rect x="180" y="500" width="160" height="160" rx="32" fill="white" opacity="0.03" transform="rotate(-20 260 580)"/>
+  <!-- Open book -->
+  <g transform="translate(800, 380)">
+    <!-- Left page -->
+    <path d="M-10,40 L-10,-80 Q-10,-100 -30,-100 L-160,-100 Q-180,-100 -180,-80 L-180,40 Q-180,55 -160,55 L-30,55 Q-10,55 -10,40 Z" fill="white" fill-opacity="0.07" stroke="white" stroke-opacity="0.12" stroke-width="1.5"/>
+    <!-- Right page -->
+    <path d="M10,40 L10,-80 Q10,-100 30,-100 L160,-100 Q180,-100 180,-80 L180,40 Q180,55 160,55 L30,55 Q10,55 10,40 Z" fill="white" fill-opacity="0.07" stroke="white" stroke-opacity="0.12" stroke-width="1.5"/>
+    <!-- Spine -->
+    <line x1="0" y1="-100" x2="0" y2="55" stroke="white" stroke-width="1.5" opacity="0.15"/>
+    <!-- Left page lines -->
+    <rect x="-155" y="-75" width="120" height="5" rx="2.5" fill="white" opacity="0.12"/>
+    <rect x="-155" y="-58" width="100" height="5" rx="2.5" fill="white" opacity="0.09"/>
+    <rect x="-155" y="-41" width="110" height="5" rx="2.5" fill="white" opacity="0.1"/>
+    <rect x="-155" y="-24" width="90" height="5" rx="2.5" fill="white" opacity="0.08"/>
+    <rect x="-155" y="-7" width="105" height="5" rx="2.5" fill="white" opacity="0.09"/>
+    <rect x="-155" y="10" width="85" height="5" rx="2.5" fill="white" opacity="0.07"/>
+    <!-- Right page lines -->
+    <rect x="35" y="-75" width="110" height="5" rx="2.5" fill="white" opacity="0.12"/>
+    <rect x="35" y="-58" width="95" height="5" rx="2.5" fill="white" opacity="0.09"/>
+    <rect x="35" y="-41" width="115" height="5" rx="2.5" fill="white" opacity="0.1"/>
+    <rect x="35" y="-24" width="80" height="5" rx="2.5" fill="white" opacity="0.08"/>
+    <rect x="35" y="-7" width="100" height="5" rx="2.5" fill="white" opacity="0.09"/>
+    <rect x="35" y="10" width="90" height="5" rx="2.5" fill="white" opacity="0.07"/>
+  </g>
+  <!-- Thought bubble / AI brain above book -->
+  <g transform="translate(800, 220)" opacity="0.7">
+    <circle cx="0" cy="0" r="45" fill="white" fill-opacity="0.06" stroke="white" stroke-opacity="0.15" stroke-width="1.5"/>
+    <!-- Brain-like pattern inside -->
+    <path d="M-15,-15 Q-5,-25 5,-15 Q15,-5 5,5 Q-5,15 -15,5 Q-25,-5 -15,-15" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.5"/>
+    <path d="M5,-20 Q15,-10 5,0 Q-5,10 5,20" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.4"/>
+    <circle cx="-8" cy="-5" r="3" fill="#c084fc" opacity="0.5"/>
+    <circle cx="8" cy="5" r="3" fill="#c084fc" opacity="0.4"/>
+    <!-- Connection dots to book -->
+    <circle cx="0" cy="55" r="4" fill="white" opacity="0.15"/>
+    <circle cx="-8" cy="65" r="3" fill="white" opacity="0.1"/>
+    <circle cx="8" cy="63" r="2.5" fill="white" opacity="0.08"/>
+  </g>
+  <!-- Floating philosophy symbols -->
+  <!-- Question mark -->
+  <g transform="translate(520, 280)" opacity="0.4">
+    <text x="0" y="0" text-anchor="middle" fill="white" font-family="Georgia,serif" font-size="48" font-weight="300">?</text>
+  </g>
+  <!-- Infinity / wisdom symbol -->
+  <g transform="translate(1080, 320)" opacity="0.3">
+    <path d="M-20,0 C-20,-15 -5,-15 0,0 C5,15 20,15 20,0 C20,-15 5,-15 0,0 C-5,15 -20,15 -20,0 Z" fill="none" stroke="white" stroke-width="2"/>
+  </g>
+  <!-- Small owl/wisdom icon -->
+  <g transform="translate(1120, 480)" opacity="0.25">
+    <circle cx="0" cy="0" r="18" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.12" stroke-width="1"/>
+    <circle cx="-6" cy="-3" r="4" fill="white" opacity="0.3"/>
+    <circle cx="6" cy="-3" r="4" fill="white" opacity="0.3"/>
+    <path d="M-4,5 L0,9 L4,5" fill="none" stroke="white" stroke-width="1.5" opacity="0.25"/>
+  </g>
+  <!-- Stars / particles -->
+  <circle cx="450" cy="200" r="2" fill="#c084fc" opacity="0.4" filter="url(#glow)"/>
+  <circle cx="1150" cy="240" r="2" fill="#c084fc" opacity="0.3" filter="url(#glow)"/>
+  <circle cx="600" cy="550" r="1.5" fill="#c084fc" opacity="0.3"/>
+  <circle cx="1000" cy="550" r="1.5" fill="#c084fc" opacity="0.25"/>
+  <text x="800" y="800" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-size="28" font-weight="500" opacity="0.6" letter-spacing="4">TUTOR DE FILOSOFIA</text>
+</svg>

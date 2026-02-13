@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#022c22"/>
+      <stop offset="50%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="35%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="70%" cy="70%" r="35%">
+      <stop offset="0%" stop-color="#6ee7b7" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="b"><feGaussianBlur stdDeviation="40"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <rect width="1600" height="900" fill="url(#g2)"/>
+  <circle cx="300" cy="280" r="130" fill="#10b981" opacity="0.12" filter="url(#b)"/>
+  <circle cx="1250" cy="600" r="150" fill="#34d399" opacity="0.1" filter="url(#b)"/>
+  <rect x="1250" y="130" width="180" height="180" rx="36" fill="white" opacity="0.03" transform="rotate(10 1340 220)"/>
+  <!-- Presentation screen / slide -->
+  <rect x="420" y="180" width="760" height="430" rx="20" fill="white" fill-opacity="0.06" stroke="white" stroke-opacity="0.12" stroke-width="1.5"/>
+  <!-- Screen top bar -->
+  <rect x="420" y="180" width="760" height="45" rx="20" fill="white" fill-opacity="0.04"/>
+  <circle cx="458" cy="202" r="6" fill="white" opacity="0.25"/>
+  <circle cx="480" cy="202" r="6" fill="white" opacity="0.18"/>
+  <circle cx="502" cy="202" r="6" fill="white" opacity="0.12"/>
+  <!-- Navigation dots (slide indicator) -->
+  <circle cx="760" cy="202" r="5" fill="#34d399" opacity="0.5"/>
+  <circle cx="783" cy="202" r="5" fill="white" opacity="0.15"/>
+  <circle cx="806" cy="202" r="5" fill="white" opacity="0.15"/>
+  <circle cx="829" cy="202" r="5" fill="white" opacity="0.15"/>
+  <!-- Slide content: title area -->
+  <rect x="490" y="260" width="280" height="12" rx="6" fill="white" opacity="0.2"/>
+  <rect x="490" y="285" width="200" height="8" rx="4" fill="white" opacity="0.12"/>
+  <!-- AI brain icon on slide -->
+  <g transform="translate(950, 340)" opacity="0.6">
+    <circle cx="0" cy="0" r="50" fill="white" fill-opacity="0.06" stroke="white" stroke-opacity="0.15" stroke-width="1.5"/>
+    <!-- Neural network pattern -->
+    <circle cx="-15" cy="-15" r="6" fill="#34d399" opacity="0.5"/>
+    <circle cx="15" cy="-15" r="6" fill="#34d399" opacity="0.4"/>
+    <circle cx="0" cy="15" r="6" fill="#34d399" opacity="0.45"/>
+    <circle cx="-25" cy="10" r="5" fill="#34d399" opacity="0.3"/>
+    <circle cx="25" cy="10" r="5" fill="#34d399" opacity="0.35"/>
+    <line x1="-15" y1="-15" x2="15" y2="-15" stroke="white" stroke-width="1" opacity="0.2"/>
+    <line x1="-15" y1="-15" x2="0" y2="15" stroke="white" stroke-width="1" opacity="0.2"/>
+    <line x1="15" y1="-15" x2="0" y2="15" stroke="white" stroke-width="1" opacity="0.2"/>
+    <line x1="-25" y1="10" x2="-15" y2="-15" stroke="white" stroke-width="1" opacity="0.15"/>
+    <line x1="25" y1="10" x2="15" y2="-15" stroke="white" stroke-width="1" opacity="0.15"/>
+    <line x1="-25" y1="10" x2="0" y2="15" stroke="white" stroke-width="1" opacity="0.15"/>
+    <line x1="25" y1="10" x2="0" y2="15" stroke="white" stroke-width="1" opacity="0.15"/>
+  </g>
+  <!-- Bullet points on left of slide -->
+  <g transform="translate(490, 330)">
+    <circle cx="0" cy="0" r="4" fill="#34d399" opacity="0.5"/>
+    <rect x="15" y="-4" width="180" height="7" rx="3.5" fill="white" opacity="0.12"/>
+    <circle cx="0" cy="30" r="4" fill="#34d399" opacity="0.4"/>
+    <rect x="15" y="26" width="160" height="7" rx="3.5" fill="white" opacity="0.1"/>
+    <circle cx="0" cy="60" r="4" fill="#34d399" opacity="0.35"/>
+    <rect x="15" y="56" width="200" height="7" rx="3.5" fill="white" opacity="0.09"/>
+    <circle cx="0" cy="90" r="4" fill="#34d399" opacity="0.3"/>
+    <rect x="15" y="86" width="140" height="7" rx="3.5" fill="white" opacity="0.08"/>
+  </g>
+  <!-- Presenter stand / podium below screen -->
+  <rect x="740" y="630" width="120" height="8" rx="4" fill="white" opacity="0.08"/>
+  <rect x="770" y="615" width="60" height="20" rx="4" fill="white" fill-opacity="0.04" stroke="white" stroke-opacity="0.08" stroke-width="1"/>
+  <!-- Audience dots -->
+  <g opacity="0.15">
+    <circle cx="500" cy="680" r="10" fill="white"/>
+    <circle cx="580" cy="690" r="10" fill="white"/>
+    <circle cx="660" cy="685" r="10" fill="white"/>
+    <circle cx="740" cy="695" r="10" fill="white"/>
+    <circle cx="820" cy="680" r="10" fill="white"/>
+    <circle cx="900" cy="690" r="10" fill="white"/>
+    <circle cx="980" cy="685" r="10" fill="white"/>
+    <circle cx="1060" cy="695" r="10" fill="white"/>
+  </g>
+  <!-- Floating particles -->
+  <circle cx="380" cy="350" r="2" fill="#6ee7b7" opacity="0.3"/>
+  <circle cx="1220" cy="300" r="2" fill="#6ee7b7" opacity="0.25"/>
+  <text x="800" y="800" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-size="28" font-weight="500" opacity="0.6" letter-spacing="4">MEALHADA 2025</text>
+</svg>

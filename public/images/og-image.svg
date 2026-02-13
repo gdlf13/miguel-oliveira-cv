@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#134e4a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="600" y="260" font-family="system-ui, sans-serif" font-size="56" font-weight="700" fill="white" text-anchor="middle">Miguel Oliveira</text>
+  <text x="600" y="330" font-family="system-ui, sans-serif" font-size="28" fill="#2dd4bf" text-anchor="middle">Psicologia · Data Science · AI Engineering</text>
+  <text x="600" y="420" font-family="system-ui, sans-serif" font-size="20" fill="#94a3b8" text-anchor="middle">Portfolio de projectos em Psicologia, Ciência de Dados e IA</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#451a03"/>
+      <stop offset="50%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="35%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="70%" cy="65%" r="35%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="b"><feGaussianBlur stdDeviation="40"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <rect width="1600" height="900" fill="url(#g2)"/>
+  <circle cx="280" cy="250" r="130" fill="#f59e0b" opacity="0.15" filter="url(#b)"/>
+  <circle cx="1300" cy="650" r="140" fill="#fbbf24" opacity="0.1" filter="url(#b)"/>
+  <!-- Glass card — dashboard -->
+  <rect x="400" y="180" width="800" height="480" rx="28" fill="white" fill-opacity="0.07" stroke="white" stroke-opacity="0.1" stroke-width="1.5"/>
+  <!-- Top bar -->
+  <rect x="400" y="180" width="800" height="50" rx="28" fill="white" fill-opacity="0.05"/>
+  <circle cx="440" cy="205" r="6" fill="white" opacity="0.3"/>
+  <circle cx="465" cy="205" r="6" fill="white" opacity="0.2"/>
+  <circle cx="490" cy="205" r="6" fill="white" opacity="0.15"/>
+  <!-- Bar chart -->
+  <rect x="470" y="460" width="55" height="140" rx="6" fill="#fbbf24" fill-opacity="0.5"/>
+  <rect x="555" y="400" width="55" height="200" rx="6" fill="#fbbf24" fill-opacity="0.6"/>
+  <rect x="640" y="340" width="55" height="260" rx="6" fill="#fbbf24" fill-opacity="0.7"/>
+  <rect x="725" y="300" width="55" height="300" rx="6" fill="#fbbf24" fill-opacity="0.8"/>
+  <rect x="810" y="360" width="55" height="240" rx="6" fill="#fbbf24" fill-opacity="0.65"/>
+  <rect x="895" y="420" width="55" height="180" rx="6" fill="#fbbf24" fill-opacity="0.55"/>
+  <!-- Trend line -->
+  <polyline points="497,450 582,390 667,330 752,290 837,350 922,410" fill="none" stroke="white" stroke-width="3" stroke-dasharray="8,5" opacity="0.5"/>
+  <!-- Side panel text lines -->
+  <rect x="1000" y="280" width="150" height="8" rx="4" fill="white" opacity="0.15"/>
+  <rect x="1000" y="310" width="120" height="8" rx="4" fill="white" opacity="0.1"/>
+  <rect x="1000" y="340" width="140" height="8" rx="4" fill="white" opacity="0.12"/>
+  <text x="800" y="800" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-size="28" font-weight="500" opacity="0.6" letter-spacing="4">INTERACTIVE REPORT</text>
+</svg>

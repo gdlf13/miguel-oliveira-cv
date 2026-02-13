@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="50%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="75%" cy="65%" r="40%">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="blur1"><feGaussianBlur stdDeviation="40"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg1)"/>
+  <rect width="1600" height="900" fill="url(#glow1)"/>
+  <rect width="1600" height="900" fill="url(#glow2)"/>
+  <!-- Floating shapes -->
+  <circle cx="250" cy="200" r="120" fill="#3b82f6" opacity="0.15" filter="url(#blur1)"/>
+  <circle cx="1350" cy="650" r="150" fill="#8b5cf6" opacity="0.12" filter="url(#blur1)"/>
+  <rect x="1100" y="100" width="200" height="200" rx="40" fill="white" opacity="0.04" transform="rotate(15 1200 200)"/>
+  <rect x="200" y="550" width="160" height="160" rx="30" fill="white" opacity="0.03" transform="rotate(-20 280 630)"/>
+  <!-- Glass card -->
+  <rect x="520" y="220" width="560" height="380" rx="32" fill="white" fill-opacity="0.07" stroke="white" stroke-opacity="0.12" stroke-width="1.5"/>
+  <!-- Letters -->
+  <text x="620" y="420" font-family="system-ui,sans-serif" font-size="140" font-weight="800" fill="white" fill-opacity="0.9" letter-spacing="8">A</text>
+  <text x="760" y="440" font-family="system-ui,sans-serif" font-size="120" font-weight="700" fill="#60a5fa" fill-opacity="0.8" letter-spacing="6">B</text>
+  <text x="880" y="410" font-family="system-ui,sans-serif" font-size="100" font-weight="600" fill="#a78bfa" fill-opacity="0.7" letter-spacing="4">C</text>
+  <!-- Decorative dots -->
+  <circle cx="580" cy="530" r="4" fill="white" opacity="0.4"/>
+  <circle cx="610" cy="530" r="4" fill="white" opacity="0.3"/>
+  <circle cx="640" cy="530" r="4" fill="white" opacity="0.2"/>
+  <!-- Label -->
+  <text x="800" y="800" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-size="28" font-weight="500" opacity="0.6" letter-spacing="4">JOGALETRAS</text>
+</svg>
