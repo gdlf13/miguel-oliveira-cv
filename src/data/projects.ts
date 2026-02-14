@@ -88,69 +88,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "linkedin-query",
-    title: "LinkedIn Query Generator",
-    description:
-      "Gerador automático de pesquisas LinkedIn para recrutadores.",
-    category: "Dados",
-    demo: null,
-    image: "/images/projects/linkedin-query.svg",
-    tech: ["Python", "Streamlit", "Boolean Logic", "UX Design"],
-    features: [
-      "Construção de queries booleanas complexas sem conhecimento técnico",
-      "Templates pré-definidos por sector e função",
-      "Pré-visualização e cópia rápida das queries geradas",
-      "Optimização de operadores AND/OR/NOT para máxima precisão",
-    ],
-  },
-  {
-    slug: "radar-vagas",
-    title: "Radar de Vagas",
-    description:
-      "Plataforma de monitorização do mercado de emprego português.",
-    category: "Apps",
-    demo: null,
-    image: "/images/projects/radar-vagas.svg",
-    tech: ["Python", "Selenium", "BeautifulSoup", "Pandas", "Streamlit"],
-    features: [
-      "Monitorização automática de vagas em múltiplos portais portugueses",
-      "Filtragem por localização, sector e tipo de contrato",
-      "Alertas para novas vagas que correspondem ao perfil",
-      "Dashboard com tendências e estatísticas do mercado",
-    ],
-  },
-  {
-    slug: "ad-chase",
-    title: "Ad Chase Agent",
-    description: "Agente de scraping de vagas IT de múltiplos portais.",
-    category: "Agentes",
-    demo: null,
-    image: "/images/projects/ad-chase.svg",
-    tech: ["Python", "Selenium", "BeautifulSoup", "Multi-Agent", "Scheduling"],
-    features: [
-      "Scraping orquestrado de vários portais de emprego em simultâneo",
-      "Agente autónomo com ciclos de recolha programados",
-      "Deduplicação inteligente de vagas entre portais",
-      "Exportação estruturada para análise posterior",
-    ],
-  },
-  {
-    slug: "linkedin-rh",
-    title: "LinkedIn RH Search",
-    description:
-      "Ferramenta de filtragem e busca LinkedIn de recrutadores.",
-    category: "Dados",
-    demo: null,
-    image: "/images/projects/linkedin-rh.svg",
-    tech: ["Python", "Streamlit", "Data Filtering", "UX Design"],
-    features: [
-      "Pesquisa avançada de perfis de recrutadores por empresa e sector",
-      "Filtragem multi-critério com interface intuitiva",
-      "Ranking de relevância baseado em correspondência de perfil",
-      "Exportação de listas filtradas para contacto directo",
-    ],
-  },
-  {
     slug: "tutor-filosofia",
     title: "Tutor de Filosofia",
     description:
@@ -164,6 +101,38 @@ export const projects: Project[] = [
       "Exercícios de exame com correcção automática e feedback",
       "Diálogo socrático adaptativo ao nível do aluno",
       "Cobertura dos autores e temas do 11.º ano",
+    ],
+  },
+  {
+    slug: "oasis-social-simulation",
+    title: "OASIS Social Simulation",
+    description:
+      "Simulador de redes sociais com agentes LLM à escala de um milhão.",
+    category: "Agentes",
+    demo: null,
+    image: "/images/projects/oasis-social-simulation.svg",
+    tech: ["Python", "LLM", "vLLM", "Multi-Agent", "Social Simulation"],
+    features: [
+      "Simulação escalável até um milhão de agentes autónomos",
+      "Ambientes dinâmicos que replicam Twitter e Reddit",
+      "21 acções distintas: seguir, comentar, repostar, entre outras",
+      "Sistemas de recomendação integrados por interesse e popularidade",
+    ],
+  },
+  {
+    slug: "verbi-carl-rogers",
+    title: "Verbi — Carl Rogers Voice Assistant",
+    description:
+      "Assistente de voz com fine-tuning de LLM para simular Carl Rogers.",
+    category: "Agentes",
+    demo: null,
+    image: "/images/projects/verbi-carl-rogers.svg",
+    tech: ["Python", "Fine-Tuning", "OpenAI API", "Groq", "Deepgram", "TTS"],
+    features: [
+      "Fine-tuning de modelo de linguagem para replicar o estilo de Carl Rogers",
+      "Arquitectura modular de voz: transcrição, geração de resposta e TTS",
+      "Exploração das potencialidades e limites da técnica de fine-tuning",
+      "Integração com múltiplas APIs de voz e linguagem",
     ],
   },
   {

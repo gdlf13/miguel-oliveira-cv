@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="50%" stop-color="#6d28d9"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="35%" cy="40%" r="45%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="65%" cy="60%" r="40%">
+      <stop offset="0%" stop-color="#c084fc" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="b"><feGaussianBlur stdDeviation="40"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <rect width="1600" height="900" fill="url(#g2)"/>
+  <circle cx="320" cy="220" r="130" fill="#7c3aed" opacity="0.15" filter="url(#b)"/>
+  <circle cx="1280" cy="620" r="160" fill="#a78bfa" opacity="0.1" filter="url(#b)"/>
+  <rect x="160" y="420" width="170" height="170" rx="38" fill="white" opacity="0.03" transform="rotate(18 245 505)"/>
+  <rect x="1220" y="110" width="210" height="210" rx="42" fill="white" opacity="0.04" transform="rotate(-12 1325 215)"/>
+  <!-- Microphone icon -->
+  <rect x="770" y="260" width="60" height="100" rx="30" fill="none" stroke="white" stroke-width="5" opacity="0.7"/>
+  <path d="M730,340 Q730,400 800,400 Q870,400 870,340" fill="none" stroke="white" stroke-width="4" opacity="0.5"/>
+  <line x1="800" y1="400" x2="800" y2="440" stroke="white" stroke-width="4" opacity="0.5"/>
+  <line x1="770" y1="440" x2="830" y2="440" stroke="white" stroke-width="4" opacity="0.5" stroke-linecap="round"/>
+  <!-- Sound waves -->
+  <path d="M700,300 Q680,330 700,360" fill="none" stroke="#a78bfa" stroke-width="3" opacity="0.4"/>
+  <path d="M670,280 Q640,330 670,380" fill="none" stroke="#a78bfa" stroke-width="2.5" opacity="0.3"/>
+  <path d="M900,300 Q920,330 900,360" fill="none" stroke="#a78bfa" stroke-width="3" opacity="0.4"/>
+  <path d="M930,280 Q960,330 930,380" fill="none" stroke="#a78bfa" stroke-width="2.5" opacity="0.3"/>
+  <!-- Fine-tuning gears -->
+  <circle cx="620" cy="520" r="22" fill="none" stroke="white" stroke-width="2.5" opacity="0.25"/>
+  <circle cx="620" cy="520" r="4" fill="white" opacity="0.25"/>
+  <circle cx="980" cy="520" r="18" fill="none" stroke="white" stroke-width="2" opacity="0.2"/>
+  <circle cx="980" cy="520" r="3" fill="white" opacity="0.2"/>
+  <!-- Neural connection dots -->
+  <circle cx="700" cy="500" r="3" fill="#a78bfa" opacity="0.4"/>
+  <circle cx="750" cy="480" r="2.5" fill="#a78bfa" opacity="0.35"/>
+  <circle cx="850" cy="480" r="2.5" fill="#a78bfa" opacity="0.35"/>
+  <circle cx="900" cy="500" r="3" fill="#a78bfa" opacity="0.4"/>
+  <line x1="620" y1="520" x2="700" y2="500" stroke="white" stroke-width="1" opacity="0.15"/>
+  <line x1="700" y1="500" x2="750" y2="480" stroke="white" stroke-width="1" opacity="0.12"/>
+  <line x1="850" y1="480" x2="900" y2="500" stroke="white" stroke-width="1" opacity="0.12"/>
+  <line x1="900" y1="500" x2="980" y2="520" stroke="white" stroke-width="1" opacity="0.15"/>
+  <text x="800" y="800" text-anchor="middle" fill="white" font-family="system-ui,sans-serif" font-size="28" font-weight="500" opacity="0.6" letter-spacing="4">VERBI — CARL ROGERS</text>
+</svg>

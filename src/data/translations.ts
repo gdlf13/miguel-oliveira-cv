@@ -58,15 +58,12 @@ export const translations: Record<Locale, Translation> = {
           "Chatbot psicoeducacional de bem-estar mental baseado em evidência.",
         "interactive-report":
           "Relatórios interactivos com chat IA e gráficos dinâmicos.",
-        "linkedin-query":
-          "Gerador automático de pesquisas LinkedIn para recrutadores.",
-        "radar-vagas":
-          "Plataforma de monitorização do mercado de emprego português.",
-        "ad-chase": "Agente de scraping de vagas IT de múltiplos portais.",
-        "linkedin-rh":
-          "Ferramenta de filtragem e busca LinkedIn de recrutadores.",
         "tutor-filosofia":
           "Tutor virtual IA para exames nacionais de Filosofia 11.º ano.",
+        "oasis-social-simulation":
+          "Simulador de redes sociais com agentes LLM à escala de um milhão.",
+        "verbi-carl-rogers":
+          "Assistente de voz com fine-tuning de LLM para simular Carl Rogers.",
         mealhada: "Apresentação web interactiva sobre IA na educação.",
       } as Record<string, string>,
     },
@@ -83,16 +80,12 @@ export const translations: Record<Locale, Translation> = {
           "O Amâncio é um chatbot psicoeducacional concebido para promover o bem-estar mental de forma acessível e baseada em evidência. Utiliza técnicas cognitivo-comportamentais para dialogar com o utilizador de forma empática, oferecendo conteúdos psicoeducacionais validados cientificamente. Inclui mecanismos de detecção de sinais de crise e encaminhamento seguro, com guardrails éticos que garantem respostas responsáveis.",
         "interactive-report":
           "O Interactive AI Report transforma dados brutos em relatórios visuais e interactivos. O utilizador pode carregar ficheiros de dados e obter automaticamente gráficos dinâmicos, ou explorar os dados através de um chat com IA usando linguagem natural. Suporta vários tipos de visualização — barras, linhas, dispersão e mapas — e permite exportar os relatórios para partilha.",
-        "linkedin-query":
-          "O LinkedIn Query Generator simplifica a criação de pesquisas booleanas complexas para o LinkedIn. Mesmo sem conhecimento técnico, recrutadores podem construir queries precisas usando templates por sector e função. A ferramenta gera, pré-visualiza e permite copiar rapidamente as queries, optimizando os operadores AND/OR/NOT para máxima relevância nos resultados.",
-        "radar-vagas":
-          "O Radar de Vagas é uma plataforma que monitoriza automaticamente o mercado de emprego em Portugal. Recolhe vagas de múltiplos portais, permite filtragem por localização, sector e tipo de contrato, e alerta o utilizador quando surgem novas oportunidades que correspondem ao seu perfil. Inclui um dashboard com tendências e estatísticas do mercado laboral.",
-        "ad-chase":
-          "O Ad Chase Agent é um agente autónomo de scraping que recolhe vagas de emprego IT de vários portais em simultâneo. Opera com ciclos programados de recolha, deduplica inteligentemente as vagas encontradas entre portais diferentes e exporta os resultados de forma estruturada para análise posterior. Desenhado para funcionar de forma contínua e sem intervenção manual.",
-        "linkedin-rh":
-          "O LinkedIn RH Search é uma ferramenta que permite pesquisar e filtrar perfis de recrutadores no LinkedIn de forma avançada. Com filtros multi-critério por empresa, sector e localização, gera rankings de relevância baseados na correspondência de perfil e permite exportar listas filtradas para contacto directo. Interface intuitiva pensada para profissionais de RH.",
         "tutor-filosofia":
           "O Tutor de Filosofia é um tutor virtual alimentado por IA, alinhado com o programa nacional de Filosofia do 11.º ano. Explica conceitos filosóficos de forma clara, propõe exercícios de exame com correcção automática e feedback detalhado, e conduz diálogos socráticos adaptativos ao nível do aluno. Cobre todos os autores e temas do currículo.",
+        "oasis-social-simulation":
+          "O OASIS é um simulador de redes sociais escalável e open-source que integra modelos de linguagem (LLM) com agentes baseados em regras para replicar realisticamente o comportamento de até um milhão de utilizadores em plataformas como Twitter e Reddit. Permite estudar fenómenos sociais complexos como disseminação de informação, polarização de grupos e comportamento de manada.",
+        "verbi-carl-rogers":
+          "O Verbi — Carl Rogers é um assistente de voz que utiliza fine-tuning de um modelo de linguagem para simular o estilo terapêutico de Carl Rogers. O objectivo central do projecto é explorar as potencialidades e os limites da técnica de fine-tuning aplicada à replicação de estilos comunicacionais específicos. A arquitectura é modular, com componentes independentes de transcrição, geração de resposta e text-to-speech, integrados com múltiplas APIs (OpenAI, Groq, Deepgram).",
         mealhada:
           "O Mealhada 2025 é uma apresentação web interactiva criada para uma sessão de formação sobre inteligência artificial na educação. Com animações imersivas e navegação por slides, apresenta aplicações práticas de IA na sala de aula e exemplos interactivos de ferramentas que professores podem usar no seu dia-a-dia. Compatível com desktop e dispositivos móveis.",
       } as Record<string, string>,
@@ -144,16 +137,12 @@ export const translations: Record<Locale, Translation> = {
           "Psychoeducational chatbot for evidence-based mental well-being.",
         "interactive-report":
           "Interactive reports with AI chat and dynamic charts.",
-        "linkedin-query":
-          "Automatic LinkedIn search query generator for recruiters.",
-        "radar-vagas":
-          "Portuguese job market monitoring platform.",
-        "ad-chase":
-          "IT job scraping agent across multiple portals.",
-        "linkedin-rh":
-          "LinkedIn recruiter filtering and search tool.",
         "tutor-filosofia":
           "AI virtual tutor for national Philosophy exams (11th grade).",
+        "oasis-social-simulation":
+          "Social media simulator with LLM agents at one-million scale.",
+        "verbi-carl-rogers":
+          "Voice assistant with LLM fine-tuning to simulate Carl Rogers.",
         mealhada:
           "Interactive web presentation on AI in education.",
       } as Record<string, string>,
@@ -171,16 +160,12 @@ export const translations: Record<Locale, Translation> = {
           "Amâncio is a psychoeducational chatbot designed to promote mental well-being in an accessible, evidence-based way. It uses cognitive-behavioural techniques to dialogue empathetically with users, offering scientifically validated psychoeducational content. It includes crisis signal detection mechanisms and safe referral, with ethical guardrails ensuring responsible responses.",
         "interactive-report":
           "Interactive AI Report transforms raw data into visual, interactive reports. Users can upload data files and automatically get dynamic charts, or explore data through an AI chat using natural language. It supports various visualisation types — bars, lines, scatter, and maps — and allows exporting reports for sharing.",
-        "linkedin-query":
-          "LinkedIn Query Generator simplifies the creation of complex boolean searches for LinkedIn. Even without technical knowledge, recruiters can build precise queries using templates by sector and role. The tool generates, previews, and allows quick copying of queries, optimising AND/OR/NOT operators for maximum relevance.",
-        "radar-vagas":
-          "Radar de Vagas is a platform that automatically monitors the Portuguese job market. It collects listings from multiple portals, allows filtering by location, sector, and contract type, and alerts users when new opportunities match their profile. Includes a dashboard with labour market trends and statistics.",
-        "ad-chase":
-          "Ad Chase Agent is an autonomous scraping agent that collects IT job listings from multiple portals simultaneously. It operates on scheduled collection cycles, intelligently deduplicates listings found across different portals, and exports structured results for further analysis. Designed to run continuously without manual intervention.",
-        "linkedin-rh":
-          "LinkedIn RH Search is a tool for advanced searching and filtering of recruiter profiles on LinkedIn. With multi-criteria filters by company, sector, and location, it generates relevance rankings based on profile matching and allows exporting filtered lists for direct contact. Intuitive interface designed for HR professionals.",
         "tutor-filosofia":
           "Tutor de Filosofia is an AI-powered virtual tutor aligned with the Portuguese national Philosophy curriculum for 11th grade. It explains philosophical concepts clearly, proposes exam exercises with automatic correction and detailed feedback, and conducts adaptive Socratic dialogues based on the student's level. Covers all authors and topics in the curriculum.",
+        "oasis-social-simulation":
+          "OASIS is a scalable, open-source social media simulator that integrates large language models with rule-based agents to realistically mimic the behaviour of up to one million users on platforms like Twitter and Reddit. It enables the study of complex social phenomena such as information spread, group polarisation, and herd behaviour.",
+        "verbi-carl-rogers":
+          "Verbi — Carl Rogers is a voice assistant that uses fine-tuning of a language model to simulate Carl Rogers' therapeutic style. The project's core goal is to explore the potential and limitations of the fine-tuning technique when applied to replicating specific communication styles. The architecture is modular, with independent components for transcription, response generation, and text-to-speech, integrated with multiple APIs (OpenAI, Groq, Deepgram).",
         mealhada:
           "Mealhada 2025 is an interactive web presentation created for a training session on artificial intelligence in education. With immersive animations and slide navigation, it showcases practical AI applications in the classroom and interactive examples of tools teachers can use daily. Compatible with desktop and mobile devices.",
       } as Record<string, string>,
@@ -209,35 +194,23 @@ export const translations: Record<Locale, Translation> = {
           "Interactive charts (bar, line, scatter, maps)",
           "Report export in shareable format",
         ],
-        "linkedin-query": [
-          "Complex boolean query building without technical knowledge",
-          "Pre-defined templates by sector and role",
-          "Preview and quick copy of generated queries",
-          "AND/OR/NOT operator optimisation for maximum precision",
-        ],
-        "radar-vagas": [
-          "Automatic job monitoring across multiple Portuguese portals",
-          "Filtering by location, sector, and contract type",
-          "Alerts for new matching opportunities",
-          "Dashboard with market trends and statistics",
-        ],
-        "ad-chase": [
-          "Orchestrated scraping of multiple job portals simultaneously",
-          "Autonomous agent with scheduled collection cycles",
-          "Intelligent deduplication across portals",
-          "Structured export for further analysis",
-        ],
-        "linkedin-rh": [
-          "Advanced recruiter profile search by company and sector",
-          "Multi-criteria filtering with intuitive interface",
-          "Relevance ranking based on profile matching",
-          "Filtered list export for direct contact",
-        ],
         "tutor-filosofia": [
           "Philosophical concept explanations aligned with the national curriculum",
           "Exam exercises with automatic correction and feedback",
           "Adaptive Socratic dialogue at the student's level",
           "Coverage of all 11th-grade authors and topics",
+        ],
+        "oasis-social-simulation": [
+          "Scalable simulation of up to one million autonomous agents",
+          "Dynamic environments replicating Twitter and Reddit",
+          "21 distinct actions: follow, comment, repost, and more",
+          "Integrated recommendation systems by interest and popularity",
+        ],
+        "verbi-carl-rogers": [
+          "LLM fine-tuning to replicate Carl Rogers' communication style",
+          "Modular voice architecture: transcription, response generation, and TTS",
+          "Exploration of fine-tuning potential and limitations",
+          "Integration with multiple voice and language APIs",
         ],
         mealhada: [
           "Immersive web presentation with animations and transitions",
