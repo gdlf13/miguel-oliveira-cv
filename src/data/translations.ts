@@ -4,6 +4,7 @@ interface Translation {
   nav: { projects: string; cv: string; contact: string };
   hero: { tagline: string; cvButton: string; projectsButton: string; scroll: string };
   highlights: { title: string; items: string[] };
+  about: { title: string; paragraphs: string[] };
   projects: {
     title: string;
     subtitle: string;
@@ -30,10 +31,20 @@ export const translations: Record<Locale, Translation> = {
       contact: "Contacto",
     },
     hero: {
-      tagline: "Psicologia · Data Science · AI Engineering",
+      tagline: "Psicologia · Data Science · AI Engineering · Cibersegurança",
       cvButton: "Ver CV (PDF)",
       projectsButton: "Ver Projectos",
       scroll: "Scroll",
+    },
+    about: {
+      title: "Sobre Mim",
+      paragraphs: [
+        "<strong>Miguel Oliveira</strong> é <strong>Psicólogo Especialista em Psicologia da Educação e em Psicologia do Trabalho, Social e das Organizações</strong>, com um percurso marcado pela integração entre ciência psicológica e tecnologia.",
+        "Entre <strong>2016 e 2024</strong>, integrou a <strong>Direção Nacional da Ordem dos Psicólogos Portugueses (OPP)</strong>, onde <strong>coordenou a Equipa de Cibersegurança</strong> e liderou o <strong>desenvolvimento de soluções digitais inovadoras</strong>, como a <em>Aplicação de Treino de Tomada de Decisão Ética em Realidade Virtual</em> e a <strong>PSIA</strong>, assistente virtual baseada em inteligência artificial criada para apoiar psicólogos.",
+        "Foi ainda <strong>membro do Conselho de Acompanhamento do Centro Internet Segura do CNCS</strong>, contribuindo para políticas nacionais de segurança digital e bem-estar online.",
+        "Desde <strong>2022</strong>, dedica-se à <strong>exploração, fine-tuning e teste de modelos de Inteligência Artificial inspirados em conceitos de Psicologia</strong>, explorando novas formas de interação ética e personalizada entre humanos e sistemas inteligentes.",
+        "Atualmente é <strong>Doutorando em Health Data Science</strong> na <strong>Faculdade de Medicina da Universidade do Porto</strong>, no <strong>Departamento de Medicina da Comunidade, Informação e Decisão em Saúde (MEDCIDS)</strong>, e <strong>membro do Ad Hoc Working Group for Digitalization da EFPA – European Federation of Psychologists' Associations</strong>, contribuindo para a reflexão europeia sobre o impacto da IA e da digitalização na Psicologia.",
+      ],
     },
     highlights: {
       title: "Destaques",
@@ -42,6 +53,7 @@ export const translations: Record<Locale, Translation> = {
         "10+ projectos de IA aplicados a educação e emprego",
         "Experiência em agentes autónomos e chatbots psicoeducacionais",
         "Formação e divulgação de IA para professores",
+        "Cibersegurança: equipa OPP e Conselho do Centro Internet Segura — CNCS",
       ],
     },
     projects: {
@@ -51,6 +63,8 @@ export const translations: Record<Locale, Translation> = {
       viewDemo: "Ver demo",
       viewDetails: "Ver detalhes",
       descriptions: {
+        "internet-segura":
+          "Campanha de sensibilização para comportamentos seguros na Internet, em parceria com o CNCS.",
         jogaletras: "App interactiva para treino de alfabetização infantil.",
         "ai-fact-checker":
           "Plataforma de verificação automática de factos com IA.",
@@ -72,6 +86,8 @@ export const translations: Record<Locale, Translation> = {
       techStack: "Tecnologias",
       features: "Funcionalidades",
       detailedDescriptions: {
+        "internet-segura":
+          "'O que a Internet diz de si' é uma campanha de sensibilização para comportamentos seguros na Internet, destinada aos adultos mais velhos, desenvolvida pela Ordem dos Psicólogos Portugueses (OPP) em parceria com o Centro Nacional de Cibersegurança (CNCS). Lançada em março de 2022, a campanha contou com os apresentadores Júlia Pinheiro e Júlio Isidro como embaixadores. A iniciativa inclui conselhos práticos sobre passwords, partilha de informação pessoal, verificação de identidade online e reconhecimento de tentativas de fraude, contribuindo com a ciência psicológica para a literacia digital e segurança online da população sénior.",
         jogaletras:
           "O JogaLetras é uma aplicação educativa desenhada para apoiar crianças no processo de alfabetização. Através de exercícios interactivos de leitura e escrita, a app adapta-se ao nível de cada criança, oferecendo desafios progressivos e recompensas que mantêm a motivação. A interface foi pensada para ser intuitiva e atractiva para utilizadores jovens, com elementos visuais coloridos e feedback imediato.",
         "ai-fact-checker":
@@ -96,6 +112,7 @@ export const translations: Record<Locale, Translation> = {
       Agentes: "Agentes",
       Dados: "Dados",
       Apps: "Apps",
+      Cibersegurança: "Cibersegurança",
     } as Record<string, string>,
     footer: {
       title: "Contacto",
@@ -108,10 +125,20 @@ export const translations: Record<Locale, Translation> = {
       contact: "Contact",
     },
     hero: {
-      tagline: "Psychology · Data Science · AI Engineering",
+      tagline: "Psychology · Data Science · AI Engineering · Cybersecurity",
       cvButton: "View CV (PDF)",
       projectsButton: "View Projects",
       scroll: "Scroll",
+    },
+    about: {
+      title: "About Me",
+      paragraphs: [
+        "<strong>Miguel Oliveira</strong> is a <strong>Specialist Psychologist in Educational Psychology and Work, Social and Organizational Psychology</strong>, with a career defined by the integration of psychological science and technology.",
+        "Between <strong>2016 and 2024</strong>, he served on the <strong>National Board of the Portuguese Psychologists' Association (OPP)</strong>, where he <strong>led the Cybersecurity Team</strong> and drove the <strong>development of innovative digital solutions</strong>, including an <em>Ethical Decision-Making Training Application in Virtual Reality</em> and <strong>PSIA</strong>, an AI-powered virtual assistant designed to support psychologists.",
+        "He was also a <strong>member of the Advisory Board of the National Cybersecurity Centre's Safer Internet Centre (CNCS)</strong>, contributing to national digital safety and online well-being policies.",
+        "Since <strong>2022</strong>, he has focused on the <strong>exploration, fine-tuning and testing of Artificial Intelligence models inspired by Psychology</strong>, exploring new forms of ethical and personalised interaction between humans and intelligent systems.",
+        "He is currently a <strong>PhD candidate in Health Data Science</strong> at the <strong>Faculty of Medicine, University of Porto</strong>, at the <strong>Department of Community Medicine, Health Information and Decision (MEDCIDS)</strong>, and a <strong>member of the EFPA Ad Hoc Working Group for Digitalization</strong>, contributing to the European reflection on the impact of AI and digitalisation on Psychology.",
+      ],
     },
     highlights: {
       title: "Highlights",
@@ -120,6 +147,7 @@ export const translations: Record<Locale, Translation> = {
         "10+ AI projects applied to education and employment",
         "Experience in autonomous agents and psychoeducational chatbots",
         "AI training and outreach for teachers",
+        "Cybersecurity: OPP team lead and Safer Internet Centre Advisory Board — CNCS",
       ],
     },
     projects: {
@@ -129,6 +157,8 @@ export const translations: Record<Locale, Translation> = {
       viewDemo: "View demo",
       viewDetails: "View details",
       descriptions: {
+        "internet-segura":
+          "Awareness campaign for safe Internet behaviour, in partnership with CNCS.",
         jogaletras:
           "Interactive app for children's literacy training.",
         "ai-fact-checker":
@@ -152,6 +182,8 @@ export const translations: Record<Locale, Translation> = {
       techStack: "Tech Stack",
       features: "Features",
       detailedDescriptions: {
+        "internet-segura":
+          "'O que a Internet diz de si' ('What the Internet says about you') is an awareness campaign for safe Internet behaviour aimed at older adults, developed by the Portuguese Psychologists' Association (OPP) in partnership with the National Cybersecurity Centre (CNCS). Launched in March 2022, the campaign featured TV presenters Júlia Pinheiro and Júlio Isidro as ambassadors. The initiative includes practical advice on passwords, personal information sharing, online identity verification, and fraud recognition, contributing psychological science to digital literacy and online safety for the senior population.",
         jogaletras:
           "JogaLetras is an educational app designed to support children in the literacy process. Through interactive reading and writing exercises, the app adapts to each child's level, offering progressive challenges and rewards that keep motivation high. The interface is designed to be intuitive and attractive for young users, with colourful visuals and immediate feedback.",
         "ai-fact-checker":
@@ -170,6 +202,12 @@ export const translations: Record<Locale, Translation> = {
           "Mealhada 2025 is an interactive web presentation created for a training session on artificial intelligence in education. With immersive animations and slide navigation, it showcases practical AI applications in the classroom and interactive examples of tools teachers can use daily. Compatible with desktop and mobile devices.",
       } as Record<string, string>,
       featureTranslations: {
+        "internet-segura": [
+          "Created and led the OPP Cybersecurity team",
+          "National campaign featuring Júlia Pinheiro and Júlio Isidro",
+          "Partnership with the National Cybersecurity Centre (CNCS)",
+          "Internet safety awareness for the senior population",
+        ],
         jogaletras: [
           "Adaptive reading and writing exercises",
           "Scoring and reward system to motivate children",
@@ -225,6 +263,7 @@ export const translations: Record<Locale, Translation> = {
       Agentes: "Agents",
       Dados: "Data",
       Apps: "Apps",
+      Cibersegurança: "Cybersecurity",
     } as Record<string, string>,
     footer: {
       title: "Contact",

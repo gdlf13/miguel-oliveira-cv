@@ -16,66 +16,58 @@ export default function Hero() {
   const glowRef = useRef<HTMLDivElement>(null);
   const glow2Ref = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const orbitRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.set(photoRef.current, { opacity: 0, scale: 0.3, rotateY: -45 });
-      gsap.set(nameRef.current, { opacity: 0, y: 80, rotateX: -50 });
-      gsap.set(taglineRef.current, { opacity: 0, y: 40, filter: "blur(10px)" });
+      gsap.set(nameRef.current, { opacity: 0, y: 60, rotateX: -40 });
+      gsap.set(taglineRef.current, { opacity: 0, y: 30, filter: "blur(10px)" });
+      gsap.set(frameRef.current, { opacity: 0, scale: 0.7, rotateY: -30 });
+      gsap.set(photoRef.current, { opacity: 0, scale: 0.5 });
       gsap.set(ctaRef.current, { opacity: 0, y: 40, scale: 0.8 });
       gsap.set(glowRef.current, { opacity: 0, scale: 0.3 });
       gsap.set(glow2Ref.current, { opacity: 0, scale: 0.3 });
       gsap.set(scrollRef.current, { opacity: 0 });
-      gsap.set(orbitRef.current, { opacity: 0, scale: 0.5, rotation: -90 });
 
       const tl = gsap.timeline({ delay: 0.2 });
 
-      // Dual glow orbs
-      tl.to(glowRef.current, {
-        opacity: 1, scale: 1, duration: 2.5, ease: "power2.out",
-      }, 0);
-      tl.to(glow2Ref.current, {
-        opacity: 1, scale: 1, duration: 2.5, ease: "power2.out",
-      }, 0.3);
-
-      // Orbit ring
-      tl.to(orbitRef.current, {
-        opacity: 1, scale: 1, rotation: 0, duration: 1.8, ease: "power4.out",
-      }, 0.2);
-
-      // Photo entrance
-      tl.to(photoRef.current, {
-        opacity: 1, scale: 1, rotateY: 0, duration: 1.4, ease: "power4.out",
-      }, 0.3);
-
-      // Name reveal
+      // Name reveal first (it's on top now)
       tl.to(nameRef.current, {
         opacity: 1, y: 0, rotateX: 0, duration: 1.4, ease: "power4.out",
-      }, 0.6);
+      }, 0);
 
       // Tagline with blur removal
       tl.to(taglineRef.current, {
         opacity: 1, y: 0, filter: "blur(0px)", duration: 1.2, ease: "expo.out",
-      }, 0.9);
+      }, 0.3);
+
+      // Dual glow orbs
+      tl.to(glowRef.current, {
+        opacity: 1, scale: 1, duration: 2.5, ease: "power2.out",
+      }, 0.2);
+      tl.to(glow2Ref.current, {
+        opacity: 1, scale: 1, duration: 2.5, ease: "power2.out",
+      }, 0.5);
+
+      // Frame entrance
+      tl.to(frameRef.current, {
+        opacity: 1, scale: 1, rotateY: 0, duration: 1.6, ease: "power4.out",
+      }, 0.4);
+
+      // Photo entrance
+      tl.to(photoRef.current, {
+        opacity: 1, scale: 1, duration: 1.4, ease: "power4.out",
+      }, 0.6);
 
       // CTAs bounce in
       tl.to(ctaRef.current, {
         opacity: 1, y: 0, scale: 1, duration: 1, ease: "elastic.out(1, 0.6)",
-      }, 1.1);
+      }, 1.0);
 
       // Scroll indicator
       tl.to(scrollRef.current, {
         opacity: 1, duration: 1, ease: "power2.out",
-      }, 1.6);
-
-      // Continuous orbit rotation
-      gsap.to(orbitRef.current, {
-        rotation: 360,
-        duration: 30,
-        repeat: -1,
-        ease: "none",
-      });
+      }, 1.4);
 
     }, sectionRef);
 
@@ -85,51 +77,59 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[90vh] flex items-center justify-center px-4 sm:px-6 pt-24 pb-16 overflow-hidden"
+      className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-24 sm:pb-32 overflow-hidden"
       style={{ perspective: "1000px" }}
     >
-      {/* Ambient glow orb 1 */}
+      {/* Ambient glow orb 1 — behind photo */}
       <div
         ref={glowRef}
-        className="pointer-events-none absolute top-1/3 left-1/3 w-[600px] h-[600px] rounded-full"
+        className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full"
         style={{
-          background: "radial-gradient(ellipse, var(--accent) 0%, transparent 70%)",
-          filter: "blur(100px)",
-          opacity: 0.12,
+          background: "radial-gradient(ellipse, rgba(255,255,255,0.08) 0%, transparent 60%)",
+          filter: "blur(80px)",
         }}
       />
-      {/* Ambient glow orb 2 */}
+      {/* Ambient glow orb 2 — subtle accent */}
       <div
         ref={glow2Ref}
-        className="pointer-events-none absolute bottom-1/3 right-1/4 w-[400px] h-[400px] rounded-full"
+        className="pointer-events-none absolute top-[40%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full"
         style={{
-          background: "radial-gradient(ellipse, #8b5cf6 0%, transparent 70%)",
-          filter: "blur(100px)",
-          opacity: 0.08,
+          background: "radial-gradient(ellipse, var(--accent) 0%, transparent 70%)",
+          filter: "blur(120px)",
+          opacity: 0.06,
         }}
       />
 
-      <div className="relative max-w-3xl mx-auto text-center">
-        {/* Profile photo with orbiting ring */}
-        <div className="mb-10 flex justify-center" style={{ perspective: "800px" }}>
-          <div className="relative">
-            {/* Orbit ring */}
-            <div
-              ref={orbitRef}
-              className="absolute inset-[-20px] sm:inset-[-24px] rounded-full border border-accent/20 pointer-events-none"
-              style={{ transformStyle: "preserve-3d" }}
-            >
-              <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-accent/60 shadow-lg shadow-accent/30" />
-              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-accent/40" />
-              <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 rounded-full bg-accent/30" />
-            </div>
+      <div className="relative max-w-3xl mx-auto text-center flex flex-col items-center">
+        {/* Name — on top */}
+        <h1
+          ref={nameRef}
+          className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-2 sm:mb-4"
+          style={{ transformStyle: "preserve-3d", fontStyle: "italic" }}
+        >
+          Miguel Oliveira
+        </h1>
 
-            <Tilt3D intensity={15} className="rounded-full">
+        {/* Tagline */}
+        <p ref={taglineRef} className="text-sm sm:text-lg text-muted mb-6 sm:mb-10 font-medium tracking-wide">
+          {t.hero.tagline}
+        </p>
+
+        {/* Profile photo — large square with glowing frame */}
+        <div className="mb-6 sm:mb-10 flex justify-center" style={{ perspective: "800px" }}>
+          <Tilt3D intensity={10} className="rounded-2xl">
+            <div
+              ref={frameRef}
+              className="relative p-[3px] rounded-2xl"
+              style={{
+                background: "linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.1) 100%)",
+                boxShadow: "0 0 60px rgba(255,255,255,0.06), 0 0 120px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.1)",
+                transformStyle: "preserve-3d",
+              }}
+            >
               <div
                 ref={photoRef}
-                className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden
-                  ring-4 ring-accent/30 shadow-2xl shadow-accent/20"
-                style={{ transformStyle: "preserve-3d" }}
+                className="relative w-44 h-44 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-2xl overflow-hidden bg-card"
               >
                 <Image
                   src="/images/profile.png"
@@ -138,33 +138,21 @@ export default function Hero() {
                   className="object-cover"
                   priority
                 />
+                {/* Bottom fade for depth */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
               </div>
-            </Tilt3D>
-          </div>
+            </div>
+          </Tilt3D>
         </div>
 
-        {/* Name */}
-        <h1
-          ref={nameRef}
-          className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-5"
-          style={{ transformStyle: "preserve-3d" }}
-        >
-          Miguel <span className="text-accent">Oliveira</span>
-        </h1>
-
-        {/* Tagline */}
-        <p ref={taglineRef} className="text-lg sm:text-xl text-muted mb-12 font-medium">
-          {t.hero.tagline}
-        </p>
-
         {/* CTAs */}
-        <div ref={ctaRef} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div ref={ctaRef} className="flex flex-row items-center justify-center gap-3 sm:gap-4">
           <a
             href="/cv/CV_MiguelOliveira_2026.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-2 px-8 py-3.5 bg-accent text-white rounded-full
-              font-semibold text-base transition-all duration-300
+            className="group relative inline-flex items-center gap-2 px-5 sm:px-8 py-3 sm:py-3.5 bg-accent text-white rounded-full
+              font-semibold text-sm sm:text-base transition-all duration-300
               shadow-lg shadow-accent/25 hover:shadow-2xl hover:shadow-accent/40 hover:scale-105
               min-h-[44px] overflow-hidden"
           >
@@ -182,14 +170,14 @@ export default function Hero() {
           </a>
           <a
             href="#projectos"
-            className="group inline-flex items-center gap-2 px-8 py-3.5 border-2 border-card-border rounded-full
-              font-semibold text-base hover:border-accent hover:text-accent transition-all duration-300
+            className="group inline-flex items-center gap-2 px-5 sm:px-8 py-3 sm:py-3.5 border border-card-border rounded-full
+              font-semibold text-sm sm:text-base hover:border-accent hover:text-accent transition-all duration-300
               hover:scale-105 hover:shadow-lg hover:shadow-accent/10 min-h-[44px]"
           >
             {t.hero.projectsButton}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-y-1 transition-transform duration-300">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <polyline points="19 12 12 19 5 12" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform duration-300">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
             </svg>
           </a>
         </div>
@@ -198,9 +186,9 @@ export default function Hero() {
       {/* Scroll indicator */}
       <div ref={scrollRef} className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <span className="text-xs text-muted font-medium tracking-widest uppercase">{t.hero.scroll}</span>
-        <div className="w-px h-10 bg-gradient-to-b from-accent/50 to-transparent relative overflow-hidden">
+        <div className="w-px h-10 bg-gradient-to-b from-muted/50 to-transparent relative overflow-hidden">
           <div
-            className="absolute w-1.5 h-1.5 rounded-full bg-accent -left-[2px]"
+            className="absolute w-1.5 h-1.5 rounded-full bg-muted -left-[2px]"
             style={{ animation: "scrollDotMove 2s ease-in-out infinite" }}
           />
         </div>
