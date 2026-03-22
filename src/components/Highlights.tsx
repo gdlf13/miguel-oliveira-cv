@@ -9,39 +9,45 @@ import Tilt3D from "./Tilt3D";
 gsap.registerPlugin(ScrollTrigger);
 
 const icons = [
-  <svg key="0" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  // Research / Book icon
+  <svg key="0" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c8a44e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    <circle cx="7" cy="8" r="1.5" fill="#c8a44e" stroke="none" />
   </svg>,
-  <svg key="1" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-    <line x1="8" y1="21" x2="16" y2="21" />
-    <line x1="12" y1="17" x2="12" y2="21" />
+  // AI / Network icon
+  <svg key="1" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c8a44e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="3" />
+    <circle cx="4" cy="6" r="2" />
+    <circle cx="20" cy="6" r="2" />
+    <circle cx="4" cy="18" r="2" />
+    <circle cx="20" cy="18" r="2" />
+    <line x1="9.5" y1="10.5" x2="5.5" y2="7.5" />
+    <line x1="14.5" y1="10.5" x2="18.5" y2="7.5" />
+    <line x1="9.5" y1="13.5" x2="5.5" y2="16.5" />
+    <line x1="14.5" y1="13.5" x2="18.5" y2="16.5" />
   </svg>,
-  <svg key="2" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20z" />
-    <path d="M12 6v6l4 2" />
+  // Agents / Bot icon
+  <svg key="2" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c8a44e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="4" width="18" height="14" rx="3" />
+    <circle cx="9" cy="11" r="1.5" fill="#c8a44e" stroke="none" />
+    <circle cx="15" cy="11" r="1.5" fill="#c8a44e" stroke="none" />
+    <path d="M8 21h8" />
+    <path d="M12 18v3" />
+    <path d="M12 1v3" />
   </svg>,
-  <svg key="3" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-    <circle cx="9" cy="7" r="4" />
-    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  // Teaching / People icon
+  <svg key="3" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c8a44e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2" />
+    <path d="M8 21h8" />
+    <path d="M12 17v4" />
+    <circle cx="12" cy="10" r="3" />
   </svg>,
-];
-
-const gradients = [
-  "from-blue-500/20 to-cyan-500/20 dark:from-blue-500/10 dark:to-cyan-500/10",
-  "from-purple-500/20 to-pink-500/20 dark:from-purple-500/10 dark:to-pink-500/10",
-  "from-amber-500/20 to-orange-500/20 dark:from-amber-500/10 dark:to-orange-500/10",
-  "from-teal-500/20 to-emerald-500/20 dark:from-teal-500/10 dark:to-emerald-500/10",
-];
-
-const iconBgColors = [
-  "bg-blue-500/15 text-blue-600 dark:bg-blue-400/15 dark:text-blue-400",
-  "bg-purple-500/15 text-purple-600 dark:bg-purple-400/15 dark:text-purple-400",
-  "bg-amber-500/15 text-amber-600 dark:bg-amber-400/15 dark:text-amber-400",
-  "bg-teal-500/15 text-teal-600 dark:bg-teal-400/15 dark:text-teal-400",
+  // Cybersecurity / Shield icon
+  <svg key="4" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c8a44e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="M9 12l2 2 4-4" stroke="#c8a44e" strokeWidth="2" />
+  </svg>,
 ];
 
 export default function Highlights() {
@@ -92,52 +98,80 @@ export default function Highlights() {
 
   return (
     <section ref={sectionRef} className="py-16 sm:py-24 px-4 sm:px-6" style={{ perspective: "1200px" }}>
-      <div className="max-w-5xl mx-auto">
-        <h2 ref={headingRef} className="text-2xl sm:text-3xl font-bold text-center mb-14">
+      <div className="max-w-3xl mx-auto">
+        <h2 ref={headingRef} className="text-xl sm:text-3xl font-bold text-center mb-10 sm:mb-14">
           {t.highlights.title}
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-          {t.highlights.items.map((text, i) => (
-            <div
-              key={i}
-              ref={(el) => { cardsRef.current[i] = el; }}
-              style={{ transformStyle: "preserve-3d" }}
-            >
-              <Tilt3D intensity={8} className="h-full rounded-2xl">
-                <div
-                  className={`relative h-full p-6 sm:p-7 rounded-2xl border border-card-border bg-gradient-to-br ${gradients[i]}
-                    backdrop-blur-sm overflow-hidden group cursor-default`}
-                >
-                  {/* Decorative corner accent */}
-                  <div className="absolute top-0 right-0 w-24 h-24 opacity-30 pointer-events-none"
-                    style={{
-                      background: `radial-gradient(circle at 100% 0%, var(--accent) 0%, transparent 70%)`,
-                    }}
-                  />
 
-                  {/* Icon */}
-                  <div className={`w-14 h-14 rounded-2xl ${iconBgColors[i]} flex items-center justify-center mb-5
-                    group-hover:scale-110 transition-transform duration-300 shadow-sm`}
-                    style={{ transform: "translateZ(30px)" }}
+        {/* Honeycomb layout */}
+        <div className="flex flex-col items-center gap-3 sm:gap-4">
+          {/* Row 1: 3 cells */}
+          <div className="flex justify-center gap-3 sm:gap-4">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                ref={(el) => { cardsRef.current[i] = el; }}
+                style={{ transformStyle: "preserve-3d" }}
+                className="w-[130px] h-[130px] sm:w-[200px] sm:h-[200px]"
+              >
+                <Tilt3D intensity={6} className="h-full rounded-2xl">
+                  <div
+                    className="relative h-full p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-card-border bg-card
+                      overflow-hidden group cursor-default transition-all duration-300
+                      hover:border-[#c8a44e]/30 flex flex-col items-center justify-center text-center"
                   >
-                    {icons[i]}
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-[#c8a44e]/10 border border-[#c8a44e]/20
+                      flex items-center justify-center mb-2 sm:mb-3 shrink-0
+                      group-hover:scale-110 group-hover:bg-[#c8a44e]/15 transition-all duration-300"
+                      style={{ transform: "translateZ(30px)" }}
+                    >
+                      {icons[i]}
+                    </div>
+                    <p
+                      className="text-[10px] sm:text-xs font-semibold leading-tight text-foreground/90"
+                      style={{ transform: "translateZ(20px)" }}
+                    >
+                      {t.highlights.items[i]}
+                    </p>
                   </div>
+                </Tilt3D>
+              </div>
+            ))}
+          </div>
 
-                  {/* Text */}
-                  <p
-                    className="text-base sm:text-lg font-semibold leading-relaxed"
-                    style={{ transform: "translateZ(20px)" }}
+          {/* Row 2: 2 cells offset */}
+          <div className="flex justify-center gap-3 sm:gap-4 -mt-1 sm:-mt-2">
+            {[3, 4].map((i) => (
+              <div
+                key={i}
+                ref={(el) => { cardsRef.current[i] = el; }}
+                style={{ transformStyle: "preserve-3d" }}
+                className="w-[130px] h-[130px] sm:w-[200px] sm:h-[200px]"
+              >
+                <Tilt3D intensity={6} className="h-full rounded-2xl">
+                  <div
+                    className="relative h-full p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-card-border bg-card
+                      overflow-hidden group cursor-default transition-all duration-300
+                      hover:border-[#c8a44e]/30 flex flex-col items-center justify-center text-center"
                   >
-                    {text}
-                  </p>
-
-                  {/* Bottom accent line */}
-                  <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent
-                    group-hover:via-accent/60 transition-all duration-500" />
-                </div>
-              </Tilt3D>
-            </div>
-          ))}
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-[#c8a44e]/10 border border-[#c8a44e]/20
+                      flex items-center justify-center mb-2 sm:mb-3 shrink-0
+                      group-hover:scale-110 group-hover:bg-[#c8a44e]/15 transition-all duration-300"
+                      style={{ transform: "translateZ(30px)" }}
+                    >
+                      {icons[i]}
+                    </div>
+                    <p
+                      className="text-[10px] sm:text-xs font-semibold leading-tight text-foreground/90"
+                      style={{ transform: "translateZ(20px)" }}
+                    >
+                      {t.highlights.items[i]}
+                    </p>
+                  </div>
+                </Tilt3D>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -110,7 +110,7 @@ export default function ProjectDetailClient({ project, categoryColor }: Props) {
                     <polyline points="15 3 21 3 21 9" />
                     <line x1="10" y1="14" x2="21" y2="3" />
                   </svg>
-                  {t.projects.viewDemo}
+                  Site
                 </a>
               )}
             </div>
@@ -121,9 +121,10 @@ export default function ProjectDetailClient({ project, categoryColor }: Props) {
 
           {/* Description */}
           <div className="detail-desc max-w-3xl mx-auto mb-12">
-            <p className="text-lg sm:text-xl leading-relaxed text-muted">
-              {detailedDesc}
-            </p>
+            <p
+              className="text-lg sm:text-xl leading-relaxed text-muted [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:text-accent/80 [&_a]:transition-colors"
+              dangerouslySetInnerHTML={{ __html: detailedDesc }}
+            />
           </div>
 
           {/* Tech stack + Features grid */}

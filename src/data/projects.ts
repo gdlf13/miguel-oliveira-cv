@@ -1,4 +1,4 @@
-export type Category = "Educação" | "Agentes" | "Dados" | "Apps";
+export type Category = "Educação" | "Agentes" | "Dados" | "Apps" | "Cibersegurança";
 
 export interface Project {
   slug: string;
@@ -16,6 +16,7 @@ export const categoryColors: Record<Category, string> = {
   Agentes: "bg-purple-900 text-purple-200",
   Dados: "bg-amber-900 text-amber-200",
   Apps: "bg-teal-900 text-teal-200",
+  Cibersegurança: "bg-yellow-900 text-yellow-200",
 };
 
 export const categoryIcons: Record<Category, string> = {
@@ -23,9 +24,25 @@ export const categoryIcons: Record<Category, string> = {
   Agentes: "🤖",
   Dados: "📊",
   Apps: "🚀",
+  Cibersegurança: "🛡️",
 };
 
 export const projects: Project[] = [
+  {
+    slug: "internet-segura",
+    title: "O que a Internet diz de si",
+    description: "Campanha de sensibilização para comportamentos seguros na Internet, em parceria com o CNCS.",
+    category: "Cibersegurança",
+    demo: "https://www.ordemdospsicologos.pt/pt/noticia/3962",
+    image: "/images/projects/internet-segura.jpg",
+    tech: ["Cibersegurança", "Psicologia", "Comunicação", "Literacia Digital", "Políticas Públicas"],
+    features: [
+      "Criação e coordenação da equipa de Cibersegurança da OPP",
+      "Campanha nacional com Júlia Pinheiro e Júlio Isidro",
+      "Parceria com o Centro Nacional de Cibersegurança (CNCS)",
+      "Sensibilização para comportamentos seguros na Internet para população sénior",
+    ],
+  },
   {
     slug: "jogaletras",
     title: "JogaLetras",
