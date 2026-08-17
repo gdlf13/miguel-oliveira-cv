@@ -1,21 +1,21 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Highlights from "@/components/Highlights";
-import About from "@/components/About";
+import Thinking from "@/components/Thinking";
+import Writing from "@/components/Writing";
 import Projects from "@/components/Projects";
+import About from "@/components/About";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  return (
-    <>
-      <Header />
-      <main>
-        <Hero />
-        <Highlights />
-        <About />
-        <Projects />
-      </main>
-      <Footer />
-    </>
-  );
+  return <>
+    <Header />
+    <main>
+      <Hero />
+      <Thinking />
+      <Writing />
+      <Projects />
+      <About />
+    </main>
+    <Footer />
+  </>;
 }

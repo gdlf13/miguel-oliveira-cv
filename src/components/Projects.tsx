@@ -1,103 +1,29 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
+import Link from "next/link";
 import { projects } from "@/data/projects";
-import ProjectCard from "./ProjectCard";
 import { useLanguage } from "./LanguageProvider";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function Projects() {
-  const { t } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headingRef.current,
-        { clipPath: "inset(0 100% 0 0)", opacity: 0 },
-        {
-          clipPath: "inset(0 0% 0 0)",
-          opacity: 1,
-          duration: 1,
-          ease: "power3.inOut",
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      gsap.fromTo(
-        subtitleRef.current,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: subtitleRef.current,
-            start: "top 88%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      const cards = cardsRef.current.filter(Boolean);
-      gsap.set(cards, { opacity: 0, rotateX: -20, y: 60, scale: 0.9 });
-
-      ScrollTrigger.batch(cards, {
-        onEnter: (batch) => {
-          gsap.to(batch, {
-            opacity: 1,
-            rotateX: 0,
-            y: 0,
-            scale: 1,
-            duration: 1.2,
-            stagger: 0.1,
-            ease: "power4.out",
-          });
-        },
-        start: "top 90%",
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <section
-      id="projectos"
-      ref={sectionRef}
-      className="py-16 sm:py-20 px-4 sm:px-6"
-      style={{ perspective: "1200px" }}
-    >
-      <div className="max-w-6xl mx-auto">
-        <h2 ref={headingRef} className="text-2xl sm:text-3xl font-bold text-center mb-4">
-          {t.projects.title}
-        </h2>
-        <p ref={subtitleRef} className="text-muted text-center mb-12 max-w-xl mx-auto">
-          {t.projects.subtitle}
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {projects.map((project, i) => (
-            <div
-              key={project.slug}
-              ref={(el) => { cardsRef.current[i] = el; }}
-              style={{ transformStyle: "preserve-3d" }}
-            >
-              <ProjectCard project={project} />
-            </div>
-          ))}
-        </div>
+  const { locale } = useLanguage();
+  const pt = locale === "pt";
+  return <section id="projectos" className="px-5 py-24 lg:px-8 lg:py-32">
+    <div className="mx-auto max-w-7xl">
+      <div className="mb-14 grid gap-5 lg:grid-cols-2 lg:items-end">
+        <div><p className="eyebrow mb-5 text-[#b94f35]">{pt ? "Do pensamento à prática" : "From thought to practice"}</p><h2 className="serif text-5xl leading-none tracking-[-.035em] sm:text-7xl">{pt ? "Coisas que construí." : "Things I have built."}</h2></div>
+        <p className="max-w-lg leading-relaxed text-black/60 lg:justify-self-end">{pt ? "Protótipos, produtos e intervenções que transformam ideias sobre comportamento, educação e inteligência em experiências concretas." : "Prototypes, products and interventions that turn ideas about behaviour, education and intelligence into tangible experiences."}</p>
       </div>
-    </section>
-  );
+      <div className="grid gap-px overflow-hidden border border-black/15 bg-black/15 md:grid-cols-2 lg:grid-cols-3">
+        {projects.map((project, i) => <Link key={project.slug} href={`/projects/${project.slug}`} className="group flex min-h-[430px] flex-col bg-[#f9f7f1] p-5 transition hover:bg-white sm:p-7">
+          <div className="mb-6 flex items-center justify-between text-[10px] font-bold uppercase tracking-[.16em] text-black/45"><span>{String(i + 1).padStart(2,"0")} / {project.category}</span><span className="text-xl transition group-hover:translate-x-1 group-hover:text-[#b94f35]">↗</span></div>
+          <div className="relative mb-7 aspect-[16/10] overflow-hidden bg-[#e8e3d8]">
+            <Image src={project.image} alt="" fill sizes="(max-width: 768px) 90vw, 33vw" className="object-cover grayscale-[30%] transition duration-500 group-hover:scale-[1.03] group-hover:grayscale-0" />
+          </div>
+          <h3 className="serif mb-3 text-3xl leading-tight">{project.title}</h3>
+          <p className="mt-auto text-sm leading-relaxed text-black/55">{project.description}</p>
+        </Link>)}
+      </div>
+    </div>
+  </section>;
 }

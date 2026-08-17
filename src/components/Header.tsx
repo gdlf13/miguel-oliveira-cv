@@ -1,126 +1,43 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { useState } from "react";
 import LanguageToggle from "./LanguageToggle";
 import { useLanguage } from "./LanguageProvider";
 
 export default function Header() {
-  const { t } = useLanguage();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const headerRef = useRef<HTMLElement>(null);
-  const logoRef = useRef<HTMLAnchorElement>(null);
-  const navItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
-
+  const { locale } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const labels = locale === "pt"
+    ? { thought: "Pensamento", writing: "Escrita", work: "Projectos", about: "Percurso", contact: "Contacto" }
+    : { thought: "Thinking", writing: "Writing", work: "Projects", about: "Journey", contact: "Contact" };
   const links = [
-    { href: "#projectos", label: t.nav.projects },
-    { href: "/cv/CV_MiguelOliveira_2026.pdf", label: t.nav.cv, external: true },
-    { href: "#contacto", label: t.nav.contact },
+    ["#pensamento", labels.thought], ["#escrita", labels.writing], ["#projectos", labels.work],
+    ["#percurso", labels.about], ["#contacto", labels.contact],
   ];
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.set(headerRef.current, { y: -80, opacity: 0 });
-      gsap.set(logoRef.current, { opacity: 0, x: -20 });
-
-      const tl = gsap.timeline({ delay: 0.1 });
-
-      tl.to(headerRef.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power4.out",
-      });
-
-      tl.to(logoRef.current, {
-        opacity: 1,
-        x: 0,
-        duration: 0.6,
-        ease: "expo.out",
-      }, "-=0.4");
-
-      const items = navItemsRef.current.filter(Boolean);
-      gsap.set(items, { opacity: 0, y: -10 });
-      tl.to(items, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: "power3.out",
-      }, "-=0.3");
-    });
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <header
-      ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-card-border"
-    >
-      <nav className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <a ref={logoRef} href="#" className="font-semibold text-lg tracking-tight hover:opacity-80 transition-opacity">
-          Miguel <span className="text-accent">Oliveira</span>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-black/10 bg-[#f2efe7]/90 backdrop-blur-xl">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8" aria-label="Navegação principal">
+        <a href="#inicio" className="flex items-baseline gap-2" onClick={() => setOpen(false)}>
+          <span className="serif text-xl font-semibold">Miguel Oliveira</span>
+          <span className="hidden text-[10px] font-bold uppercase tracking-[.18em] text-[#b94f35] sm:inline">Psicologia × IA</span>
         </a>
-
-        {/* Desktop nav */}
-        <div className="hidden sm:flex items-center gap-6">
-          {links.map((link, i) => (
-            <a
-              key={link.href}
-              ref={(el) => { navItemsRef.current[i] = el; }}
-              href={link.href}
-              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="relative text-sm font-medium text-muted hover:text-foreground transition-colors
-                after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-accent
-                after:transition-all after:duration-300 hover:after:w-full"
-            >
-              {link.label}
-            </a>
-          ))}
+        <div className="hidden items-center gap-6 lg:flex">
+          {links.map(([href, label]) => <a key={href} href={href} className="text-xs font-semibold tracking-wide text-black/60 transition hover:text-black">{label}</a>)}
           <LanguageToggle />
+          <a href="/cv/CV_MiguelOliveira_2026.pdf" target="_blank" rel="noreferrer" className="rounded-full bg-[#171714] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#b94f35]">CV ↗</a>
         </div>
-
-        {/* Mobile menu button + toggles */}
-        <div className="flex sm:hidden items-center gap-1">
+        <div className="flex items-center gap-2 lg:hidden">
           <LanguageToggle />
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menu"
-            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-foreground/10 transition-colors"
-          >
-            {menuOpen ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
+          <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Abrir menu" className="grid h-10 w-10 place-items-center rounded-full border border-black/15">
+            <span className="text-xl leading-none">{open ? "×" : "≡"}</span>
           </button>
         </div>
       </nav>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="sm:hidden bg-background/95 backdrop-blur-md border-b border-card-border px-4 pb-4">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              onClick={() => setMenuOpen(false)}
-              className="block py-3 text-base font-medium text-muted hover:text-foreground transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-      )}
+      {open && <div className="border-t border-black/10 bg-[#f2efe7] px-5 py-5 lg:hidden">
+        {links.map(([href, label]) => <a key={href} href={href} onClick={() => setOpen(false)} className="serif block border-b border-black/10 py-3 text-2xl">{label}</a>)}
+        <a href="/cv/CV_MiguelOliveira_2026.pdf" target="_blank" rel="noreferrer" className="mt-5 inline-flex rounded-full bg-[#171714] px-5 py-3 text-sm font-semibold text-white">CV completo ↗</a>
+      </div>}
     </header>
   );
 }

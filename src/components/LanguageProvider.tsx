@@ -22,6 +22,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Hydrate the browser-only preference after the server render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const stored = localStorage.getItem("lang") as Locale | null;
     if (stored === "en" || stored === "pt") {

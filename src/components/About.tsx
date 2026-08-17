@@ -1,81 +1,36 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLanguage } from "./LanguageProvider";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function About() {
-  const { t } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const parasRef = useRef<(HTMLParagraphElement | null)[]>([]);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headingRef.current,
-        { clipPath: "inset(0 100% 0 0)", opacity: 0 },
-        {
-          clipPath: "inset(0 0% 0 0)",
-          opacity: 1,
-          duration: 1,
-          ease: "power3.inOut",
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      const paras = parasRef.current.filter(Boolean);
-      gsap.set(paras, { opacity: 0, y: 30 });
-      ScrollTrigger.batch(paras, {
-        onEnter: (batch) =>
-          gsap.to(batch, {
-            opacity: 1,
-            y: 0,
-            duration: 0.9,
-            stagger: 0.12,
-            ease: "power3.out",
-          }),
-        start: "top 88%",
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <section ref={sectionRef} className="py-16 sm:py-24 px-4 sm:px-6">
-      <div className="max-w-3xl mx-auto">
-        <h2
-          ref={headingRef}
-          className="text-xl sm:text-3xl font-bold text-center mb-10 sm:mb-14"
-        >
-          {t.about.title}
-        </h2>
-
-        <div className="relative pl-5 sm:pl-7 border-l-2 border-[#c8a44e]/30 space-y-6 sm:space-y-8">
-          {/* Gold top dot */}
-          <span className="absolute -left-[5px] top-0 w-2.5 h-2.5 rounded-full bg-[#c8a44e] opacity-70" />
-          {/* Gold bottom dot */}
-          <span className="absolute -left-[5px] bottom-0 w-2.5 h-2.5 rounded-full bg-[#c8a44e] opacity-30" />
-
-          {t.about.paragraphs.map((html, i) => (
-            <p
-              key={i}
-              ref={(el) => { parasRef.current[i] = el; }}
-              className="text-sm sm:text-base leading-relaxed text-foreground/80
-                [&_strong]:text-[#c8a44e] [&_strong]:font-semibold [&_em]:italic [&_em]:text-foreground/70"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-          ))}
-        </div>
+  const { locale } = useLanguage();
+  const pt = locale === "pt";
+  const steps = pt ? [
+    ["2001—", "Psicologia", "Especialista em Psicologia da Educação e em Psicologia do Trabalho, Social e das Organizações."],
+    ["2016—2024", "Liderança profissional", "Direção Nacional da Ordem dos Psicólogos Portugueses; coordenação da equipa de Cibersegurança e de soluções digitais."],
+    ["2022—", "IA aplicada", "Exploração e construção de agentes, tutores, modelos adaptados e interfaces entre conhecimento psicológico e sistemas inteligentes."],
+    ["2023—", "Health Data Science", "Doutoramento na Faculdade de Medicina da Universidade do Porto, com foco em dados sintéticos de saúde éticos e eficazes."],
+    ["2024—", "Perspectiva europeia", "Ad Hoc Working Group for Digitalization da EFPA e docência em Psicologia e Inteligência Artificial."],
+  ] : [
+    ["2001—", "Psychology", "Specialist in Educational Psychology and in Work, Social and Organisational Psychology."],
+    ["2016—2024", "Professional leadership", "National Board of the Portuguese Psychologists' Association; cybersecurity team and digital solutions leadership."],
+    ["2022—", "Applied AI", "Building agents, tutors, adapted models and interfaces between psychological knowledge and intelligent systems."],
+    ["2023—", "Health Data Science", "PhD at the University of Porto Faculty of Medicine, focused on ethical and effective synthetic health data."],
+    ["2024—", "European perspective", "EFPA Ad Hoc Working Group for Digitalization and teaching Psychology and Artificial Intelligence."],
+  ];
+  return <section id="percurso" className="border-y border-black/15 bg-[#e7e0d4] px-5 py-24 lg:px-8 lg:py-32">
+    <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[.8fr_1.2fr]">
+      <div className="lg:sticky lg:top-28 lg:self-start">
+        <p className="eyebrow mb-5 text-[#b94f35]">{pt ? "Percurso" : "Journey"}</p>
+        <h2 className="serif text-5xl leading-[1.02] tracking-[-.035em] sm:text-6xl">{pt ? "Uma carreira sem fronteiras disciplinares." : "A career without disciplinary borders."}</h2>
+        <p className="mt-7 max-w-md leading-relaxed text-black/60">{pt ? "A continuidade não está nos cargos. Está numa pergunta: como usar conhecimento sobre pessoas para desenhar instituições e tecnologias melhores?" : "The continuity is not in job titles. It is in one question: how can knowledge about people help design better institutions and technologies?"}</p>
+        <a href="/cv/CV_MiguelOliveira_2026.pdf" target="_blank" rel="noreferrer" className="mt-8 inline-flex rounded-full bg-[#171714] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#b94f35]">{pt ? "Curriculum completo ↗" : "Full curriculum ↗"}</a>
       </div>
-    </section>
-  );
+      <ol className="border-t border-black/20">
+        {steps.map(([year,title,body]) => <li key={title} className="grid gap-3 border-b border-black/20 py-7 sm:grid-cols-[120px_1fr]">
+          <span className="text-xs font-bold tracking-[.14em] text-[#b94f35]">{year}</span><div><h3 className="serif mb-2 text-2xl">{title}</h3><p className="max-w-2xl text-sm leading-relaxed text-black/60">{body}</p></div>
+        </li>)}
+      </ol>
+    </div>
+  </section>;
 }
