@@ -1,12 +1,15 @@
-// Ilha 5 — Percurso: "o caminho". Um caminho de lajes sobe por terraços de altura crescente, ligando os marcos de uma carreira:
-// consultório (2001) → escola → instituições (arcadas) → um rio atravessado por uma ponte em arco (Luís I) → FMUP e dados de saúde.
-// No último terraço, um gráfico de barras crescente e uma baliza cujo topo é o ponto vivo vermelhão.
+// Ilha 5 — Percurso: "o caminho". Um caminho de lajes sobe por terraços de altura crescente, ligando as instituições de uma carreira,
+// cada uma moldada em barro a partir dos traços do edifício real (ver percurso-edificios.js), por ordem cronológica:
+// ISMAI (2001) → EB 2/3 Napoleão Sousa Marques (2002/03) → Programa Escolhas (2004/09) → EB/S de Pinheiro (2009–) → Ordem dos Psicólogos (2016–24)
+// → um rio atravessado por uma ponte em arco (Luís I) → FMUP (2022–), com um gráfico de barras crescente e uma baliza cujo topo é o ponto vivo vermelhão.
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { PAL } from "../materials.js";
 import { makeIsland } from "../island.js";
 import { mesh, rbox, TAU, rng, clamp, lerp, smooth } from "../util.js";
-import { popper, cypress, bush, contact } from "./kit.js";
+import { popper, cypress, bush } from "./kit.js";
+import { bucket, textTexture, decal } from "./percurso-kit.js";
+import { ismai, eb23, escolhas, pinheiro, opp, fmup } from "./percurso-edificios.js";
 
 const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
 const V2 = (x, y) => new THREE.Vector2(x, y);
@@ -21,59 +24,12 @@ const C = {
 };
 
 // ---------- utilitários locais ----------
-// fundir geometrias por material (poucos draw calls)
-function bucket() {
-  const map = new Map(), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(0, 0, 0, "YXZ"), pv = new THREE.Vector3(), sv = new THREE.Vector3();
-  const api = {
-    add(geo, mat, { p = [0, 0, 0], r = [0, 0, 0], s = 1, cast = true } = {}) {
-      const g = geo.index ? geo.toNonIndexed() : geo.clone();
-      for (const k of Object.keys(g.attributes)) if (k !== "position" && k !== "normal" && k !== "uv") g.deleteAttribute(k);
-      if (!g.attributes.uv) g.setAttribute("uv", new THREE.BufferAttribute(new Float32Array(g.attributes.position.count * 2), 2));
-      e.set(r[0], r[1], r[2]); q.setFromEuler(e); pv.set(p[0], p[1], p[2]);
-      if (typeof s === "number") sv.set(s, s, s); else sv.set(s[0], s[1], s[2]);
-      g.applyMatrix4(m4.compose(pv, q, sv));
-      const key = mat.uuid + (cast ? "c" : "n");
-      let ent = map.get(key); if (!ent) map.set(key, (ent = { mat, cast, geos: [] }));
-      ent.geos.push(g);
-      return api;
-    },
-    box(w, h, d, mat, p, o = {}) { return api.add(o.flat ? new THREE.BoxGeometry(w, h, d) : rbox(w, h, d, o.r ?? 0.04, o.seg ?? 2), mat, { p, r: o.rot, cast: o.cast }); },
-    build(parent) { map.forEach((ent) => parent.add(mesh(ent.geos.length > 1 ? mergeGeometries(ent.geos) : ent.geos[0], ent.mat, { cast: ent.cast }))); map.clear(); return parent; },
-  };
-  return api;
-}
-
-// telhado de duas águas: cumeeira ao longo de x, profundidade em z, base em y=0
-function gable(len, depth, rise, over = 0.14) {
-  const s = new THREE.Shape(), hd = depth / 2 + over;
-  s.moveTo(-hd, 0); s.lineTo(hd, 0); s.lineTo(0, rise); s.lineTo(-hd, 0);
-  const g = new THREE.ExtrudeGeometry(s, { depth: len, bevelEnabled: true, bevelSize: 0.045, bevelThickness: 0.045, bevelSegments: 2, curveSegments: 2 });
-  g.translate(0, 0, -len / 2); g.rotateY(-Math.PI / 2);
-  return g;
-}
-
 // laje/terraço a partir de um polígono no plano xz, de y0 a y1 (topo e lados com materiais distintos)
 function slab(poly, y0, y1, mats, bev = 0.07) {
   const sh = new THREE.Shape(poly.map(([x, z]) => V2(x, -z)));
   const g = new THREE.ExtrudeGeometry(sh, { depth: Math.max(0.01, y1 - y0 - 2 * bev), bevelEnabled: true, bevelSize: bev, bevelThickness: bev, bevelOffset: -bev, bevelSegments: 2, curveSegments: 4 });
   g.rotateX(-Math.PI / 2); g.translate(0, y0 + bev, 0);
   return mesh(g, mats);
-}
-
-// fachada de arcos de volta perfeita (com janelas quadradas por cima), frente em +z, base em y=0, centrada em x
-function arcade(W, H, nA, ow, archRect, winY, winW, winH, thick) {
-  const s = new THREE.Shape();
-  s.moveTo(-W / 2, 0); s.lineTo(W / 2, 0); s.lineTo(W / 2, H); s.lineTo(-W / 2, H); s.lineTo(-W / 2, 0);
-  const pw = (W - nA * ow) / (nA + 1);
-  for (let i = 0; i < nA; i++) {
-    const cx = -W / 2 + pw + ow / 2 + i * (ow + pw);
-    const h = new THREE.Path();
-    h.moveTo(cx - ow / 2, 0.07); h.lineTo(cx - ow / 2, archRect); h.absarc(cx, archRect, ow / 2, Math.PI, 0, true); h.lineTo(cx + ow / 2, 0.07); h.lineTo(cx - ow / 2, 0.07);
-    s.holes.push(h);
-    if (winW) { const w = new THREE.Path(); w.moveTo(cx - winW / 2, winY); w.lineTo(cx + winW / 2, winY); w.lineTo(cx + winW / 2, winY + winH); w.lineTo(cx - winW / 2, winY + winH); w.lineTo(cx - winW / 2, winY); s.holes.push(w); }
-  }
-  const g = new THREE.ExtrudeGeometry(s, { depth: thick, bevelEnabled: false, curveSegments: 14 });
-  return g; // z de 0 a thick
 }
 
 // escada maciça: (x,z) = centro da aresta superior; dir = sentido de descida; n degraus de altura rise entre y0 e y0+n*rise
@@ -100,36 +56,6 @@ function roundPoly(pts, r = 0.6, seg = 4, keep = () => false) {
   return out;
 }
 
-// texturas de canvas: placas com algarismos, relógio, sigla Ψ
-function textTexture(text, { w = 512, h = 256, bg = "#3A2E28", fg = "#F4ECDD", size = 168, weight = 700 } = {}) {
-  const c = document.createElement("canvas"); c.width = w; c.height = h;
-  const g = c.getContext("2d");
-  g.fillStyle = bg; g.fillRect(0, 0, w, h);
-  g.strokeStyle = fg; g.globalAlpha = 0.35; g.lineWidth = 6; g.strokeRect(14, 14, w - 28, h - 28); g.globalAlpha = 1;
-  g.fillStyle = fg; g.font = `${weight} ${size}px "Helvetica Neue", Helvetica, Arial, "DejaVu Sans", sans-serif`; g.textAlign = "center"; g.textBaseline = "middle";
-  g.fillText(text, w / 2, h / 2 + size * 0.04);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
-}
-function clockTexture() {
-  const c = document.createElement("canvas"); c.width = c.height = 160;
-  const g = c.getContext("2d"), m = 80;
-  g.fillStyle = "#2E2622"; g.beginPath(); g.arc(m, m, 78, 0, TAU); g.fill();
-  g.fillStyle = "#F7F0E0"; g.beginPath(); g.arc(m, m, 66, 0, TAU); g.fill();
-  g.strokeStyle = "#2E2622"; g.lineCap = "round";
-  for (let i = 0; i < 12; i++) { const a = (i / 12) * TAU; g.lineWidth = i % 3 ? 4 : 8; g.beginPath(); g.moveTo(m + Math.sin(a) * 52, m - Math.cos(a) * 52); g.lineTo(m + Math.sin(a) * 61, m - Math.cos(a) * 61); g.stroke(); }
-  g.lineWidth = 9; g.beginPath(); g.moveTo(m, m); g.lineTo(m + Math.sin(-0.5) * 34, m - Math.cos(-0.5) * 34); g.stroke();
-  g.lineWidth = 6; g.beginPath(); g.moveTo(m, m); g.lineTo(m + Math.sin(2.0) * 50, m - Math.cos(2.0) * 50); g.stroke();
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
-}
-function psiTexture() {
-  const c = document.createElement("canvas"); c.width = c.height = 160;
-  const g = c.getContext("2d"), m = 80;
-  g.fillStyle = "#F4ECDD"; g.beginPath(); g.arc(m, m, 78, 0, TAU); g.fill();
-  g.strokeStyle = "#2C5D66"; g.lineWidth = 12; g.lineCap = "round";
-  g.beginPath(); g.moveTo(m, 30); g.lineTo(m, 132); g.stroke();
-  g.beginPath(); g.moveTo(m - 36, 42); g.lineTo(m - 36, 72); g.arc(m, 72, 36, Math.PI, 0, true); g.lineTo(m + 36, 42); g.stroke();
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
-}
 // aparelho de pedra: fiadas horizontais com juntas desencontradas (u = metros no muro, v = altura em metros)
 function masonryTexture() {
   const W = 256, c = document.createElement("canvas"); c.width = c.height = W;
@@ -158,7 +84,6 @@ function waterTexture(base) {
   }
   const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
 }
-const decal = (tex, w, h) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85, alphaTest: 0.5 }));
 
 export function buildPercurso(M) {
   const g = new THREE.Group(), pops = [], P = popper(g, pops), Rn = rng(41);
@@ -262,6 +187,11 @@ export function buildPercurso(M) {
     const sg3 = P(0, 0, 0.35); stairFlight(sg3, ST0.x, ST0.z, [0, 1], 1.3, ST0.n, Y1 / ST0.n, 0.42, 0, stairMat);
   }
 
+  // ================= LAYOUT DOS MARCOS =================
+  // [x, z, escala, yaw] de cada edifício; as placas ficam no canto da frente, junto ao caminho
+  const L_ISMAI = [-4.1, 5.0, 0.95, 0.4], L_EB = [-4.5, 1.55, 0.88, 0.3], L_ESC = [-4.4, -1.1, 0.88, 0.25], L_PIN = [-4.1, -3.85, 0.88, 0.2], L_OPP = [5.0, -1.15, 0.88, 0.1], L_FM = [3.25, -4.05, 0.82, 0.12];
+  const PL = { ismai: [-2.55, 5.55, 0.3], eb: [-2.7, 2.7, 0.3], esc: [-2.7, 0.05, 0.25], pin: [-2.7, -2.55, 0.2], opp: [3.95, 0.05, 0.15], fm: [3.75, -2.15, 0.15] };
+
   // ================= CAMINHO (lajes) =================
   const tiles = [];
   function pathRun(ctrl, y, width = 1.0, step = 0.7) {
@@ -283,105 +213,44 @@ export function buildPercurso(M) {
   const mTile = M.clay("#FFFFFF", { rough: 0.85, bump: 0.3, vertexColors: true });
   {
     const bf = bridgeFoot, be = bridgeEast, s0 = [ST0.x, ST0.z + ST0.n * 0.42];
-    // T0: do consultório até ao pé da escada
-    pathRun([[-3.9, 6.05], [-3.0, 6.35], [-1.9, 6.3], [s0[0] - 0.1, s0[1] + 0.05]], 0, 1.0);
+    // T0: da entrada do ISMAI até ao pé da escada
+    pathRun([[-3.2, 6.55], [-2.4, 6.5], [-1.9, 6.3], [s0[0] - 0.1, s0[1] + 0.05]], 0, 1.0);
     // T1: escada -> ao longo do terraço -> pé da escada da ponte
     pathRun([[ST0.x, ST0.z - 0.1], [-1.0, 3.9], [-1.9, 2.8], [-2.2, 1.5], [bf[0] + 0.15, bf[1] + 0.1]], Y1, 1.0);
-    // ramais: escola e instituições
-    pathRun([[-1.85, 3.0], [-2.8, 3.1], [-3.6, 3.15]], Y1, 0.85);
-    pathRun([[-2.2, 0.9], [-3.0, 0.2], [-3.7, -0.5]], Y1, 0.85);
-    // T3: da ponte ao edifício
-    pathRun([[be[0] + 0.25, be[1] - 0.05], [2.55, -1.0], [2.8, -1.7], [2.95, -2.3]], Y3, 0.95);
+    // espinha para norte, ao longo das fachadas
+    pathRun([[-2.2, 1.0], [-2.3, -0.8], [-2.35, -2.6], [-2.4, -4.4]], Y1, 0.9);
+    // T3: da ponte ao adro do FMUP
+    pathRun([[be[0] + 0.25, be[1] - 0.05], [2.7, -1.6], [3.0, -2.4], [3.25, -2.85]], Y3, 0.95);
+    pathRun([[2.65, -1.35], [3.4, -0.85], [4.1, -0.5]], Y3, 0.8);
     grpTiles = P(0, 0, 0.5); grpTiles.add(mesh(mergeGeometries(tiles), mTile, { cast: false }));
   }
 
   // ================= MARCOS =================
-  // ---- 1. Clínica (2001) ----
-  const clinic = P(-4.2, 4.8, 0.15); clinic.rotation.y = 0.5;
-  {
-    const B = bucket(), mBody = M.clay(C.ochre, { rough: 0.85, bump: 0.35 }), mRoof = M.clay(C.roof, { rough: 0.85, bump: 0.4 });
-    B.box(2.3, 0.1, 2.0, mStone2, [0, 0.05, 0.1], { r: 0.04 });
-    B.box(1.7, 1.1, 1.35, mBody, [0, 0.1 + 0.55, 0], { r: 0.05 });
-    B.add(gable(1.9, 1.35, 0.74, 0.12), mRoof, { p: [0, 1.2, 0] });
-    B.box(0.28, 0.65, 0.28, mStone, [0.5, 1.62, -0.2], { r: 0.03 });
-    B.box(0.4, 0.74, 0.06, mInk, [-0.4, 0.1 + 0.37, 0.7], { r: 0.02 });
-    B.box(0.54, 0.06, 0.1, mStone, [-0.4, 0.1 + 0.78, 0.71], { r: 0.02 });
-    B.box(0.44, 0.4, 0.06, mWin, [0.52, 0.1 + 0.66, 0.7], { r: 0.02 });
-    B.box(0.56, 0.05, 0.12, mStone, [0.52, 0.1 + 0.43, 0.73], { r: 0.02 });
-    B.box(0.66, 0.1, 0.42, mStone, [-0.4, 0.15, 0.94], { r: 0.03 });
-    B.build(clinic);
-    const psi = decal(psiTexture(), 0.3, 0.3); psi.position.set(0.05, 0.1 + 0.66, 0.705); clinic.add(psi);
-    const cs = contact(1.7, 0.8); cs.scale.set(1.2, 1, 1); clinic.add(cs);
-  }
-  // placa "2001"
-  const plaque1 = P(-2.4, 4.9, 0.6); plaque1.rotation.y = 0.22;
-  {
-    const B = bucket(); B.box(1.5, 0.8, 0.16, mInk, [0, 0.4, 0], { r: 0.05 }); B.box(1.75, 0.1, 0.5, mStone2, [0, 0.05, 0.06], { r: 0.04 }); B.build(plaque1);
-    const d = decal(textTexture("2001"), 1.3, 0.65); d.position.set(0, 0.43, 0.085); plaque1.add(d);
-  }
-
-  // ---- 2. Escola ----
-  const school = P(-4.6, 1.1, 0.2, Y1); school.rotation.y = 0.25;
-  {
-    const B = bucket(), mBody = M.clay("#F1E6CE", { rough: 0.85, bump: 0.3 }), mRoof = M.clay(C.roof, { rough: 0.85, bump: 0.4 }), mCap = M.clay(C.ochreD, { rough: 0.8, bump: 0.3 });
-    B.box(3.2, 0.14, 2.2, mStone2, [0, 0.07, 0.05], { r: 0.04 });
-    B.box(2.9, 1.2, 1.6, mBody, [0, 0.14 + 0.6, 0], { r: 0.05 });
-    B.add(gable(3.15, 1.6, 0.65, 0.15), mRoof, { p: [0, 1.34, 0] });
-    B.box(0.95, 1.2, 0.28, mBody, [0.35, 0.14 + 0.6, 0.9], { r: 0.05 });
-    B.box(0.44, 0.8, 0.06, mInk, [0.35, 0.14 + 0.4, 1.06], { r: 0.02 });
-    B.box(0.66, 0.08, 0.12, mStone, [0.35, 0.14 + 0.86, 1.06], { r: 0.02 });
-    B.box(0.85, 0.08, 0.34, mStone, [0.35, 0.18, 1.2], { r: 0.03 });
-    [-0.35, 0.05, 0.95, 1.25].forEach((x) => { if (Math.abs(x) < 1.4) { B.box(0.3, 0.5, 0.06, mWin, [x, 0.14 + 0.7, 0.82], { r: 0.02 }); B.box(0.4, 0.05, 0.1, mStone, [x, 0.14 + 0.43, 0.84], { r: 0.02 }); } });
-    // torre do relógio no extremo esquerdo
-    const tx = -1.0;
-    B.box(0.9, 1.3, 0.9, mBody, [tx, 1.25 + 0.65, 0.05], { r: 0.05 });
-    B.box(1.05, 0.1, 1.05, mStone, [tx, 2.6, 0.05], { r: 0.03 });
-    B.add(new THREE.ConeGeometry(0.78, 0.75, 4), mCap, { p: [tx, 2.65 + 0.375, 0.05], r: [0, Math.PI / 4, 0] });
-    B.add(new THREE.SphereGeometry(0.065, 10, 8), mCap, { p: [tx, 3.5, 0.05] });
-    B.build(school);
-    const cl = decal(clockTexture(), 0.56, 0.56); cl.position.set(tx, 2.0, 0.05 + 0.455); school.add(cl);
-    const cs = contact(2.2, 0.7); cs.scale.set(1.3, 1, 0.85); school.add(cs);
-  }
-
-  // ---- 3. Instituições (arcadas) ----
-  const inst = P(-3.4, -3.5, 0.25, Y1); inst.rotation.y = -0.25;
-  {
-    const B = bucket(), mBody = M.clay("#F1E6CE", { rough: 0.85, bump: 0.3 }), mFac = M.clay("#F6EEDC", { rough: 0.8, bump: 0.25 }), mDome = M.clay(C.tealL, { rough: 0.7, bump: 0.2 }), mCor = M.clay("#DCC79F", { rough: 0.8, bump: 0.3 }), mOchre = M.clay(C.ochreD, { rough: 0.7, bump: 0.2 });
-    const W = 3.5, H = 2.3, PODH = 0.8, D = 1.5;
-    B.box(W + 0.5, PODH, 2.3, mStone2, [0, PODH / 2, -0.15], { r: 0.05 });
-    for (let i = 0; i < 3; i++) { const h = PODH - (i + 1) * 0.2; B.box(W + 0.3 - i * 0.2, h, 0.42, mStone, [0, h / 2, 1.0 + 0.21 + i * 0.42], { r: 0.03 }); }
-    B.box(W, H, D, mBody, [0, PODH + H / 2, -0.4], { r: 0.04 });
-    B.box(W - 0.08, H - 0.1, 0.05, mDark, [0, PODH + H / 2 - 0.02, 0.375], { r: 0.01 });
-    B.box(W + 0.3, 0.17, D + 0.5, mCor, [0, PODH + H + 0.085, 0.0], { r: 0.04 });
-    B.box(1.4, 0.5, 0.9, mFac, [0, PODH + H + 0.17 + 0.25, -0.2], { r: 0.04 });
-    B.add(new THREE.CylinderGeometry(0.56, 0.6, 0.28, 32), mFac, { p: [0, PODH + H + 0.17 + 0.5 + 0.14, -0.2] });
-    B.add(new THREE.SphereGeometry(0.56, 32, 16, 0, TAU, 0, Math.PI / 2), mDome, { p: [0, PODH + H + 0.17 + 0.78, -0.2] });
-    B.add(new THREE.SphereGeometry(0.075, 12, 10), mOchre, { p: [0, PODH + H + 0.17 + 0.78 + 0.6, -0.2] });
-    B.build(inst);
-    const fac = mesh(arcade(W, H, 4, 0.54, 1.15, 1.7, 0.3, 0.4, 0.62), mFac); fac.position.set(0, PODH, 0.32); inst.add(fac);
-    const cs = contact(2.7, 0.7); cs.scale.set(1.3, 1, 1.0); inst.add(cs);
-  }
-
-  // ---- 5. FMUP ----
-  const fmup = P(3.85, -3.3, 0.1, Y3); fmup.rotation.y = 0.2;
-  {
-    const B = bucket(), mSage = M.clay(C.sage, { rough: 0.8, bump: 0.3 }), mCore = M.clay(C.teal, { rough: 0.7, bump: 0.25 }), mRoofP = M.clay(C.stone, { rough: 0.7, bump: 0.2 });
-    B.box(3.6, 0.16, 2.0, mStone2, [0, 0.08, 0], { r: 0.04 });
-    B.box(2.3, 3.1, 1.7, mSage, [-0.5, 0.16 + 1.55, 0], { r: 0.05 });
-    B.box(1.0, 4.8, 1.7, mCore, [1.15, 0.16 + 2.4, 0], { r: 0.05 });
-    B.box(2.55, 0.14, 1.95, mRoofP, [-0.5, 0.16 + 3.1 + 0.07, 0.02], { r: 0.04 });
-    B.box(1.2, 0.14, 1.95, mRoofP, [1.15, 0.16 + 4.8 + 0.07, 0.02], { r: 0.04 });
-    [0.8, 1.45, 2.1, 2.75].forEach((y) => { B.box(1.85, 0.32, 0.07, mWin, [-0.5, y + 0.16, 0.84], { r: 0.02 }); });
-    B.box(0.28, 0.98, 0.12, mStone, [1.15, 0.16 + 3.85, 0.9], { r: 0.03 });
-    B.box(0.98, 0.28, 0.12, mStone, [1.15, 0.16 + 3.97, 0.9], { r: 0.03 });
-    B.box(0.5, 0.86, 0.06, mInk, [-1.1, 0.16 + 0.43, 0.86], { r: 0.02 });
-    B.box(1.0, 0.07, 0.55, mRoofP, [-1.1, 0.16 + 1.02, 1.08], { r: 0.02 });
-    B.box(0.06, 0.96, 0.06, mStone, [-1.52, 0.16 + 0.5, 1.3], { r: 0.02 });
-    B.build(fmup);
-    const cs = contact(2.6, 0.7); cs.scale.set(1.35, 1, 0.9); fmup.add(cs);
-  }
+  // seis instituições por ordem cronológica: T0 → T1 (de frente para trás) → ponte → T3. Cada uma "nasce" do chão em momentos escalonados.
+  const site = (x, z, at, y, yaw, sc, build) => {
+    const w = P(x, z, at, y); w.rotation.y = yaw;
+    const inner = new THREE.Group(); inner.scale.setScalar(sc); w.add(inner); build(inner, M); return w;
+  };
+  const plaque = (x, z, at, y, yaw, text) => {
+    const w = P(x, z, at, y); w.rotation.y = yaw;
+    const inner = new THREE.Group(); inner.scale.setScalar(0.85); w.add(inner);
+    const B = bucket(); B.box(1.5, 0.56, 0.13, mInk, [0, 0.28, 0], { r: 0.04 }); B.box(1.7, 0.08, 0.42, mStone2, [0, 0.04, 0.05], { r: 0.03 }); B.build(inner);
+    const d = decal(textTexture(text, { w: 640, h: 256, size: 150 }), 1.36, 0.5); d.position.set(0, 0.3, 0.07); inner.add(d); return w;
+  };
+  site(L_ISMAI[0], L_ISMAI[1], 0.15, 0, L_ISMAI[3], L_ISMAI[2], ismai);
+  site(L_EB[0], L_EB[1], 0.2, Y1, L_EB[3], L_EB[2], eb23);
+  site(L_ESC[0], L_ESC[1], 0.25, Y1, L_ESC[3], L_ESC[2], escolhas);
+  site(L_PIN[0], L_PIN[1], 0.3, Y1, L_PIN[3], L_PIN[2], pinheiro);
+  site(L_OPP[0], L_OPP[1], 0.15, Y3, L_OPP[3], L_OPP[2], opp);
+  site(L_FM[0], L_FM[1], 0.1, Y3, L_FM[3], L_FM[2], fmup);
+  plaque(PL.ismai[0], PL.ismai[1], 0.55, 0, PL.ismai[2], "2001");
+  plaque(PL.eb[0], PL.eb[1], 0.55, Y1, PL.eb[2], "2002–03");
+  plaque(PL.esc[0], PL.esc[1], 0.6, Y1, PL.esc[2], "2004–09");
+  plaque(PL.pin[0], PL.pin[1], 0.65, Y1, PL.pin[2], "2009–");
+  plaque(PL.opp[0], PL.opp[1], 0.7, Y3, PL.opp[2], "2016–24");
+  plaque(PL.fm[0], PL.fm[1], 0.75, Y3, PL.fm[2], "2022–");
   // gráfico de barras crescente (à frente do edifício)
-  const barsInfo = [], chart = P(4.6, -1.1, 0.4, Y3); chart.rotation.y = 0.2;
+  const barsInfo = [], chart = P(4.9, 4.4, 0.4, 0); chart.rotation.y = -0.15;
   {
     const mBase = M.clay(C.stone2, { rough: 0.85, bump: 0.25 }), B = bucket();
     B.box(2.7, 0.08, 0.66, mBase, [0, 0.04, 0], { r: 0.03 }); B.build(chart);
@@ -391,13 +260,6 @@ export function buildPercurso(M) {
       const b = mesh(geo, M.clay(cols[i], { rough: 0.6, bump: 0.15 })); b.position.set(-1.05 + i * 0.42, 0.08, 0); chart.add(b); barsInfo.push({ m: b, i });
     });
   }
-  // placa "2026"
-  const plaque2 = P(3.75, 0.3, 0.7, Y3); plaque2.rotation.y = 0.12;
-  {
-    const B = bucket(); B.box(1.3, 0.74, 0.14, mInk, [0, 0.37, 0], { r: 0.05 }); B.box(1.5, 0.1, 0.46, mStone2, [0, 0.05, 0.05], { r: 0.04 }); B.build(plaque2);
-    const d = decal(textTexture("2026"), 1.14, 0.58); d.position.set(0, 0.4, 0.075); plaque2.add(d);
-  }
-
   // ---- baliza / bandeirola com o ponto vivo ----
   const FX = 6.15, FZ = -0.05, POLE = 5.9;
   const flagG = P(FX, FZ, 0.2, Y3);

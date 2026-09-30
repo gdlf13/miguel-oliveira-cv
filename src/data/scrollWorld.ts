@@ -3,7 +3,7 @@ import type { Locale } from "./translations";
 /**
  * Copy das 6 cenas do voo 3D (ver src/lib/world3d). Cada cena corresponde a uma ilha:
  * inicio (cabeça + rede neuronal), pensamento (neurónio), escrita (arquivo),
- * projectos (campus), percurso (caminho até à FMUP), contacto (carta + selo).
+ * projectos (campus), percurso (as instituições, do ISMAI à FMUP), contacto (carta + selo).
  */
 // Um único vermelhão vivo (linguagem "cognitive sumi"): o acento nunca muda de cena para cena.
 const VERMILION = "#B02E1C";
@@ -100,14 +100,14 @@ const SCENES: { id: string; accent: string; copy: Record<Locale, Copy> }[] = [
         eyebrow: "Do consultório ao doutoramento",
         title: "Uma carreira sem fronteiras.",
         body: "Psicologia, liderança institucional, cibersegurança e Health Data Science na Universidade do Porto.",
-        tags: ["Ordem dos Psicólogos", "EFPA", "FMUP"],
+        tags: ["ISMAI", "EB 2/3 Napoleão Sousa Marques", "Programa Escolhas", "EBS Pinheiro", "Ordem dos Psicólogos · EFPA", "FMUP"],
       },
       en: {
         label: "Journey",
         eyebrow: "From practice to PhD",
         title: "A career without borders.",
         body: "Psychology, institutional leadership, cybersecurity and Health Data Science at the University of Porto.",
-        tags: ["Portuguese Psychologists' Association", "EFPA", "FMUP"],
+        tags: ["ISMAI", "EB 2/3 Napoleão Sousa Marques", "Escolhas Programme", "EBS Pinheiro", "Portuguese Psychologists' Association · EFPA", "FMUP"],
       },
     },
   },

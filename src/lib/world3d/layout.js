@@ -14,7 +14,7 @@ export const ISLANDS = [
   { id: "pensamento", dist: 42, focus: [0.4, 4.0, 0],  pitch: 0.48, dyaw: -0.06 },
   { id: "escrita",    dist: 42, focus: [0, 2.2, 0],    pitch: 0.52, dyaw: 0.10 },
   { id: "projectos",  dist: 42, focus: [0, 2.6, 0],    pitch: 0.50, dyaw: -0.08 },
-  { id: "percurso",   dist: 44, focus: [0, 2.8, 0],    pitch: 0.46, dyaw: 0.08 },
+  { id: "percurso",   dist: 38, focus: [0.4, 2.3, 0],    pitch: 0.46, dyaw: 0.08 },
   { id: "contacto",   dist: 40, focus: [0, 2.2, 0],    pitch: 0.50, dyaw: 0.00 },
 ];
 
