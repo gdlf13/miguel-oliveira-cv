@@ -7,20 +7,20 @@ import { mesh, rbox, TAU } from "../util.js";
 export function bucket() {
   const map = new Map(), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(0, 0, 0, "YXZ"), pv = new THREE.Vector3(), sv = new THREE.Vector3();
   const api = {
-    add(geo, mat, { p = [0, 0, 0], r = [0, 0, 0], s = 1, cast = true } = {}) {
+    add(geo, mat, { p = [0, 0, 0], r = [0, 0, 0], s = 1, cast = true, live = false } = {}) {
       const g = geo.index ? geo.toNonIndexed() : geo.clone();
       for (const k of Object.keys(g.attributes)) if (k !== "position" && k !== "normal" && k !== "uv") g.deleteAttribute(k);
       if (!g.attributes.uv) g.setAttribute("uv", new THREE.BufferAttribute(new Float32Array(g.attributes.position.count * 2), 2));
       e.set(r[0], r[1], r[2]); q.setFromEuler(e); pv.set(p[0], p[1], p[2]);
       if (typeof s === "number") sv.set(s, s, s); else sv.set(s[0], s[1], s[2]);
       g.applyMatrix4(m4.compose(pv, q, sv));
-      const key = mat.uuid + (cast ? "c" : "n");
-      let ent = map.get(key); if (!ent) map.set(key, (ent = { mat, cast, geos: [] }));
+      const key = mat.uuid + (cast ? "c" : "n") + (live ? "L" : "");
+      let ent = map.get(key); if (!ent) map.set(key, (ent = { mat, cast, live, geos: [] }));
       ent.geos.push(g);
       return api;
     },
-    box(w, h, d, mat, p, o = {}) { return api.add(o.flat ? new THREE.BoxGeometry(w, h, d) : rbox(w, h, d, o.r ?? 0.04, o.seg ?? 2), mat, { p, r: o.rot, cast: o.cast }); },
-    build(parent) { map.forEach((ent) => parent.add(mesh(ent.geos.length > 1 ? mergeGeometries(ent.geos) : ent.geos[0], ent.mat, { cast: ent.cast }))); map.clear(); return parent; },
+    box(w, h, d, mat, p, o = {}) { return api.add(o.flat ? new THREE.BoxGeometry(w, h, d) : rbox(w, h, d, o.r ?? 0.04, o.seg ?? 2), mat, { p, r: o.rot, cast: o.cast, live: o.live }); },
+    build(parent) { map.forEach((ent) => { const m = mesh(ent.geos.length > 1 ? mergeGeometries(ent.geos) : ent.geos[0], ent.mat, { cast: ent.cast }); if (ent.live) m.userData.live = true; parent.add(m); }); map.clear(); return parent; },
   };
   return api;
 }
