@@ -58,6 +58,78 @@ body {
 .animate-rise-delay { animation: rise .85s .16s cubic-bezier(.2,.75,.2,1) both; }
 .animate-line { transform-origin: left; animation: drawLine 1.2s .35s cubic-bezier(.2,.75,.2,1) both; }
 
+/* ---- voo 3D (ScrollWorld3D): canvas sticky + texto DOM por cena ---- */
+.sw3 {
+  --sw-ink: #2b2521;
+  --sw-ink-soft: #5d544b;
+  --sw-accent: #c42d1a;        /* vermelhão: o "ponto vivo" do mundo 3D */
+  --sw-sky-top: #ead8c4; --sw-sky-mid: #e9c4a2; --sw-sky-low: #da9f7c;
+  --sw-font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  position: relative;
+  color: var(--sw-ink);
+  background: linear-gradient(180deg, var(--sw-sky-top), var(--sw-sky-mid) 55%, var(--sw-sky-low));
+}
+.sw3__stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.sw3__sky { position: absolute; inset: 0; background: linear-gradient(180deg, var(--sw-sky-top), var(--sw-sky-mid) 55%, var(--sw-sky-low)); }
+.sw3__canvas { position: absolute; inset: 0; opacity: 0; transition: opacity .9s ease; }
+.sw3.is-ready .sw3__canvas { opacity: 1; }
+/* véu de leitura: o texto vive sobre o céu, à esquerda (desktop) ou em baixo (mobile) */
+.sw3__veil { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(234,216,196,.9) 0%, rgba(234,216,196,.62) 26%, rgba(234,216,196,0) 52%); }
+
+.sw3__copy { position: absolute; z-index: 2; left: max(24px, 6vw); top: 50%; translate: 0 -50%; width: min(40vw, 520px); will-change: opacity, transform; }
+.sw3__eyebrow { margin: 0 0 18px; font-size: .72rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--sw-accent); }
+.sw3__title { margin: 0; font-family: var(--sw-font-display); font-weight: 500; letter-spacing: -.012em; line-height: 1.02; font-size: clamp(2.5rem, 5.2vw, 4.3rem); text-wrap: balance; }
+.sw3__body { margin: 22px 0 0; font-size: clamp(1rem, 1.2vw, 1.12rem); line-height: 1.55; color: var(--sw-ink-soft); max-width: 44ch; }
+.sw3__tags { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.sw3__tags li { padding: 7px 13px; font-size: .8rem; font-weight: 500; letter-spacing: .02em; border: 1px solid color-mix(in srgb, var(--sw-ink) 26%, transparent); border-radius: 2px; background: rgba(255,250,242,.35); backdrop-filter: blur(3px); }
+.sw3__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.sw3__btn { display: inline-flex; align-items: center; padding: 13px 22px; font-size: .9rem; font-weight: 600; letter-spacing: .02em; border-radius: 2px; border: 1px solid var(--sw-ink); color: var(--sw-ink); text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
+.sw3__btn:hover { background: var(--sw-ink); color: #fbf3e6; }
+.sw3__btn--primary { background: var(--sw-ink); color: #fbf3e6; }
+.sw3__btn--primary:hover { background: var(--sw-accent); border-color: var(--sw-accent); }
+
+/* carril de cenas (direita) */
+.sw3__rail { position: absolute; z-index: 3; right: max(14px, 2.2vw); top: 50%; translate: 0 -50%; display: flex; flex-direction: column; gap: 4px; }
+.sw3__dot { position: relative; width: 26px; height: 26px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.sw3__dot::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: color-mix(in srgb, var(--sw-ink) 34%, transparent); transition: transform .25s, background .25s; }
+.sw3__dot.is-active::before { background: var(--sw-accent); transform: scale(1.5); }
+.sw3__dot:hover::before { background: var(--sw-ink); }
+.sw3__dot-label { position: absolute; right: 30px; white-space: nowrap; font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; opacity: 0; transform: translateX(6px); transition: opacity .2s, transform .2s; pointer-events: none; padding: 4px 8px; background: rgba(251,243,230,.92); border-radius: 2px; }
+.sw3__dot:hover .sw3__dot-label, .sw3__dot:focus-visible .sw3__dot-label { opacity: 1; transform: none; }
+.sw3__dot:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 2px; border-radius: 50%; }
+
+.sw3__hint { position: absolute; z-index: 2; left: 50%; bottom: 22px; translate: -50% 0; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: .68rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--sw-ink-soft); transition: opacity .4s; }
+.sw3__hint i { width: 1px; height: 30px; background: linear-gradient(var(--sw-ink), transparent); transform-origin: top; animation: sw3-hint 2s ease-in-out infinite; }
+@keyframes sw3-hint { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* no fim do voo o céu escurece para a secção seguinte (fundo #171714) */
+.sw3__fade { position: absolute; z-index: 4; left: 0; right: 0; bottom: 0; height: 45svh; pointer-events: none;
+  background: linear-gradient(180deg, rgba(23,23,20,0) 0%, rgba(23,23,20,.35) 55%, #171714 100%); }
+
+/* versão sem WebGL: as 6 cenas em coluna, tipografia apenas */
+.sw3.is-static { background: var(--paper); }
+.sw3.is-static .sw3__stage { position: relative; height: auto; min-height: 100svh; padding: 7rem max(24px, 6vw) 4rem; display: grid; gap: 4.5rem; align-content: start; }
+.sw3.is-static .sw3__sky, .sw3.is-static .sw3__canvas, .sw3.is-static .sw3__veil { display: none; }
+.sw3.is-static .sw3__copy { position: relative; left: auto; top: auto; translate: none; width: min(100%, 640px); opacity: 1 !important; visibility: visible !important; transform: none !important; }
+
+@media (max-width: 860px) {
+  .sw3__veil { background: linear-gradient(0deg, rgba(234,216,196,.94) 0%, rgba(234,216,196,.78) 30%, rgba(234,216,196,0) 58%); }
+  .sw3__copy { left: 20px; right: 44px; width: auto; top: auto; bottom: calc(env(safe-area-inset-bottom) + clamp(44px, 8svh, 72px)); translate: none; }
+  .sw3__eyebrow { margin-bottom: 12px; font-size: .66rem; letter-spacing: .16em; }
+  .sw3__title { font-size: clamp(1.9rem, 8.6vw, 2.6rem); }
+  .sw3__body { margin-top: 12px; font-size: .93rem; line-height: 1.48; }
+  .sw3__tags { margin-top: 16px; gap: 6px; }
+  .sw3__tags li { font-size: .74rem; padding: 6px 10px; }
+  .sw3__cta { margin-top: 20px; }
+  .sw3__btn { padding: 12px 18px; }
+  .sw3__rail { right: 6px; }
+  .sw3__dot-label { display: none; }
+  .sw3__hint { bottom: 10px; }
+  .sw3.is-static .sw3__stage { padding-top: 6rem; }
+  .sw3.is-static .sw3__copy { right: auto; left: auto; bottom: auto; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

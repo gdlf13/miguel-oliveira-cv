@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Cormorant_Garamond } from "next/font/google";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
+const cormorant = Cormorant_Garamond({ variable: "--font-cormorant", subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://miguel-oliveira-cv.vercel.app"),
@@ -30,5 +31,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     jobTitle: "Psychologist and Health Data Science Researcher",
     sameAs: ["https://www.linkedin.com/in/miguel-oliveira-8b7301125", "https://github.com/gdlf13", "https://orcid.org/0000-0002-8176-3100"],
   };
-  return <html lang="pt"><body className={`${inter.variable} antialiased`}><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} /><LanguageProvider>{children}</LanguageProvider></body></html>;
+  return <html lang="pt"><body className={`${inter.variable} ${cormorant.variable} antialiased`}><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }} /><LanguageProvider>{children}</LanguageProvider></body></html>;
 }
