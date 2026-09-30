@@ -130,7 +130,7 @@ export function mountWorld(container, opts = {}) {
   const onVis = () => { if (!document.hidden) last = performance.now(); };
   document.addEventListener("visibilitychange", onVis);
 
-  let lastRaf = performance.now();
+  let lastRaf = performance.now(), rafDt = 17;
   function tick(now) {
     if (!inView()) return;
     const raw = Math.max(0, (now - last) / 1000), dt = Math.min(0.05, raw); last = now; t += reduced ? 0 : dt; frames++;
@@ -139,10 +139,10 @@ export function mountWorld(container, opts = {}) {
     render(state.smooth, t, dt);
     if (!ready) { ready = true; gate.then(() => opts.onReady && opts.onReady()); }
   }
-  function frame(now) { raf = requestAnimationFrame(frame); lastRaf = now; tick(now); }
+  function frame(now) { raf = requestAnimationFrame(frame); rafDt += (Math.min(5000, now - lastRaf) - rafDt) * 0.2; lastRaf = now; tick(now); }
   // relógio de segurança: se o browser parar o requestAnimationFrame (separador/iframe considerado "em segundo plano"),
-  // um temporizador continua a desenhar para a câmara seguir o scroll na mesma (só entra em ação se o rAF parar >0,7 s)
-  const dog = setInterval(() => { const now = performance.now(); if (now - lastRaf > 700) tick(now); }, 100);
+  // um temporizador continua a desenhar para a câmara seguir o scroll na mesma (só entra em ação se o rAF parar bem além do ritmo normal de frames, mín. 0,7 s)
+  const dog = setInterval(() => { const now = performance.now(); if (now - lastRaf > Math.max(700, rafDt * 3.5)) tick(now); }, 100);
   function render(u, tt, dt) {
     const c = placeCamera(u, tt, dt);
     updatePops(u);

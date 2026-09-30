@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getScenes } from "@/data/scrollWorld";
+import Image from "next/image";
 import { SEG, activeIndex, copyWeight, totalScreens } from "@/lib/world3d/timeline";
 import { useLanguage } from "./LanguageProvider";
 
@@ -139,7 +140,16 @@ export default function ScrollWorld3D() {
             style={i === 0 ? undefined : { opacity: 0, visibility: "hidden" }}
             aria-labelledby={`sw3-t-${s.id}`}
           >
-            <p className="sw3__eyebrow">{s.eyebrow}</p>
+            {i === 0 || i === scenes.length - 1 ? (
+              <div className="sw3__byline">
+                <span className="sw3__avatar">
+                  <Image src="/images/miguel-avatar.webp" alt={i === 0 ? "Miguel Oliveira" : ""} width={144} height={144} sizes="72px" priority={i === 0} />
+                </span>
+                <p className="sw3__eyebrow">{s.eyebrow}</p>
+              </div>
+            ) : (
+              <p className="sw3__eyebrow">{s.eyebrow}</p>
+            )}
             <h2 id={`sw3-t-${s.id}`} className="sw3__title">{s.title}</h2>
             <p className="sw3__body">{s.body}</p>
             {s.tags.length > 0 && (
