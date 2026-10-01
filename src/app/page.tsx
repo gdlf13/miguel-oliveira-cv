@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
+import ScrollWorld3D from "@/components/ScrollWorld3D";
 import Thinking from "@/components/Thinking";
 import Writing from "@/components/Writing";
 import Projects from "@/components/Projects";
@@ -10,7 +10,7 @@ export default function Home() {
   return <>
     <Header />
     <main>
-      <Hero />
+      <ScrollWorld3D />
       <Thinking />
       <Writing />
       <Projects />
