@@ -91,5 +91,7 @@ export function buildPensamento(M) {
     nucleolus.scale.setScalar(1 + Math.sin(t * 2.4) * 0.12); act.scale.setScalar(1 + Math.sin(t * 3.1) * 0.25);
     net.children.forEach((c) => { if (c.userData.y0 != null) c.position.y = c.userData.y0 + Math.sin(t * 0.6 + c.userData.ph) * 0.22; });
   };
-  return { group: g, update, pops, thread: [[act.position.x - 0.4, act.position.y, act.position.z - 0.3]] };
+  // só as partes grossas (soma, núcleo, monte, pescoço) respondem: os dendritos são finos demais para acertar com o cursor
+  const hot = [{ id: "pensamento.neuron", obj: [soma, nuc, mound, neck], ring: mound }];
+  return { group: g, update, pops, thread: [[act.position.x - 0.4, act.position.y, act.position.z - 0.3]], hot };
 }

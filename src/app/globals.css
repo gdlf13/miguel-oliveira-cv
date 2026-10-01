@@ -87,6 +87,15 @@ body {
 .sw3__body { margin: 22px 0 0; font-size: clamp(1rem, 1.2vw, 1.12rem); line-height: 1.55; color: var(--sw-ink-soft); max-width: 44ch; }
 .sw3__tags { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .sw3__tags li { padding: 7px 13px; font-size: .8rem; font-weight: 500; letter-spacing: .02em; border: 1px solid color-mix(in srgb, var(--sw-ink) 26%, transparent); border-radius: 2px; background: rgba(255,250,242,.35); backdrop-filter: blur(3px); }
+.sw3__tags li.is-link { padding: 0; }
+.sw3__tags li.is-link a { display: block; padding: 7px 13px; color: inherit; text-decoration: none; transition: background .2s, color .2s; }
+.sw3__tags li.is-link:hover { border-color: var(--sw-accent); }
+.sw3__tags li.is-link a:hover { background: rgba(255,250,242,.75); color: var(--sw-accent); }
+.sw3__tags li.is-link a:focus-visible { outline: 2px solid var(--sw-accent); outline-offset: 2px; }
+.sw3__clue { display: flex; align-items: center; gap: 9px; margin: 16px 0 0; font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--sw-ink-soft); }
+.sw3__clue::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--sw-accent); animation: sw3-clue 2.2s ease-in-out infinite; }
+@keyframes sw3-clue { 0%, 100% { transform: scale(.7); opacity: .55; } 50% { transform: scale(1.2); opacity: 1; } }
+.sw3__tip { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; padding: 7px 12px; font-size: .78rem; font-weight: 600; letter-spacing: .02em; white-space: nowrap; color: #fbf3e6; background: rgba(43,37,33,.95); border-radius: 2px; box-shadow: 0 8px 22px -8px rgba(43,37,33,.45); }
 .sw3__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .sw3__btn { display: inline-flex; align-items: center; padding: 13px 22px; font-size: .9rem; font-weight: 600; letter-spacing: .02em; border-radius: 2px; border: 1px solid var(--sw-ink); color: var(--sw-ink); text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
 .sw3__btn:hover { background: var(--sw-ink); color: #fbf3e6; }
@@ -127,6 +136,9 @@ body {
   .sw3__body { margin-top: 12px; font-size: .93rem; line-height: 1.48; }
   .sw3__tags { margin-top: 16px; gap: 6px; }
   .sw3__tags li { font-size: .74rem; padding: 6px 10px; }
+  .sw3__tags li.is-link { padding: 0; }
+  .sw3__tags li.is-link a { padding: 6px 10px; }
+  .sw3__clue { margin-top: 12px; font-size: .64rem; letter-spacing: .1em; }
   .sw3__cta { margin-top: 20px; }
   .sw3__btn { padding: 12px 18px; }
   .sw3__rail { right: 6px; }

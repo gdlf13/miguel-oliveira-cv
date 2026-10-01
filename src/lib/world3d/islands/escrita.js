@@ -284,10 +284,11 @@ export function buildEscrita(M) {
     if (kind === "news") [-0.4, 0.42].forEach((sx) => geos.push(paint(rbox(0.07, H + 0.03, d + 0.03, 0.02, 2), "#A07A3C").translate(sx, H / 2, 0)));
     w0.add(mesh(mergeGeometries(geos), sheetM)); w0.rotation.y = ry;
     const cs = contact(1, 0.85); cs.scale.set(1.3, 1.3, 1); w0.add(cs);
+    return w0;
   };
-  stack(3.5, 4.2, -0.32, "magazine", 7, 1.45, 1.95, 0.1, [PAL.teal, "#F6EEDA", PAL.terraL, "#F6EEDA", PAL.ochre, "#F6EEDA", PAL.terra], 5);
-  stack(5.1, 2.3, 0.5, "news", 9, 1.75, 2.3, 0.065, ["#F2EAD6", "#DCD1BA"], 8);
-  stack(1.6, 4.9, 0.25, "magazine", 4, 1.3, 1.75, 0.1, [PAL.sage, "#F6EEDA", PAL.ochreL], 11);
+  const stTek = stack(3.5, 4.2, -0.32, "magazine", 7, 1.45, 1.95, 0.1, [PAL.teal, "#F6EEDA", PAL.terraL, "#F6EEDA", PAL.ochre, "#F6EEDA", PAL.terra], 5);
+  const stNews = stack(5.1, 2.3, 0.5, "news", 9, 1.75, 2.3, 0.065, ["#F2EAD6", "#DCD1BA"], 8);
+  const stMag = stack(1.6, 4.9, 0.25, "magazine", 4, 1.3, 1.75, 0.1, [PAL.sage, "#F6EEDA", PAL.ochreL], 11);
 
   /* ============================== Vegetação mínima ============================== */
   const c1 = P(6.05, 0.5, 0.85); c1.add(cypress(M, { h: 3.5, r: 0.5, seed: 3 }));
@@ -309,5 +310,6 @@ export function buildEscrita(M) {
     });
     liveMat.emissiveIntensity = 1.9 + Math.sin(t * 3.0) * 0.55;
   };
-  return { group: g, update, pops, thread: [[tp.x, tp.y, tp.z]] };
+  const hot = [{ id: "escrita.book", obj: hero }, { id: "escrita.arquivo", obj: shelf }, { id: "escrita.pen", obj: pen }, { id: "escrita.tek", obj: stTek }, { id: "escrita.je", obj: stNews }, { id: "escrita.ensaios", obj: stMag }];
+  return { group: g, update, pops, thread: [[tp.x, tp.y, tp.z]], hot };
 }

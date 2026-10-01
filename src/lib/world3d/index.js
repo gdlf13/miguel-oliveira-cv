@@ -11,6 +11,7 @@ import { BUILDERS } from "./islands/index.js";
 import { clamp, smooth, easeOutBack, disposeTree } from "./util.js";
 import { createPost } from "./post.js";
 import { loadBaked, applyBaked } from "./baked.js";
+import { createHotspots } from "./hotspots.js";
 
 export function detectQuality() {
   if (typeof window === "undefined") return "high";
@@ -75,6 +76,9 @@ export function mountWorld(container, opts = {}) {
   let track = buildCameraTrack(16 / 9), post = null, W = 1, H = 1;
   const pointer = { x: 0, y: 0, sx: 0, sy: 0 };
   const state = { target: 0, smooth: 0 };
+  // ilhas clicáveis: `opts.onHotspot(id)` ao clicar num objecto; `opts.onHover(id|null)` ao passar o rato por cima
+  const nearOf = (i) => { const s = SEG[i]; return 1 - clamp(Math.abs(state.smooth - s.mid) / ((s.b - s.a) * 1.15)); };
+  const hot = createHotspots({ holders, builts, camera, dom: renderer.domElement, nearOf, onHover: opts.onHover, onClick: opts.onHotspot });
 
   function resize() {
     const r = container.getBoundingClientRect(); W = Math.max(2, Math.floor(r.width)); H = Math.max(2, Math.floor(r.height));
@@ -148,6 +152,7 @@ export function mountWorld(container, opts = {}) {
     updatePops(u);
     updaters.forEach((f) => f(tt, u));
     clouds.update(tt); dust.update(tt); thread.update(u, tt, c);
+    hot.update(tt, performance.now());
     post ? post.render(dt) : renderer.render(scene, camera);
   }
   // ilhas cozidas: carrega por ordem; a 1.ª pintura só é revelada depois das duas primeiras (ou ao fim de 6 s)
@@ -166,6 +171,8 @@ export function mountWorld(container, opts = {}) {
     renderAt(p, tt = 1) { state.target = state.smooth = clamp(p); t = tt; render(state.smooth, tt, 0.016); },
     resize,
     // utilitários de depuração (harness)
+    settle() { pointer.sx = pointer.x; pointer.sy = pointer.y; }, // (testes) assenta já o paralaxe do rato
+    hotspots() { return hot.screen(); }, pickAt(x, y) { const h = hot.pick(x, y); return h ? h.id : null; },
     localToWorld(i, p) { return new THREE.Vector3(...p).applyMatrix4(holders[i].matrixWorld).toArray(); },
     setDebugCam(o) { dbg = o ? { pos: o.pos, look: o.look } : null; },
     get quality() { return quality; },
@@ -174,7 +181,7 @@ export function mountWorld(container, opts = {}) {
     canvas: renderer.domElement,
     destroy() {
       cancelAnimationFrame(raf); clearInterval(dog); if (typeof killBaked === "function") killBaked(); ro.disconnect(); io.disconnect();
-      window.removeEventListener("pointermove", onPointer); document.removeEventListener("visibilitychange", onVis);
+      hot.dispose(); window.removeEventListener("pointermove", onPointer); document.removeEventListener("visibilitychange", onVis);
       disposeTree(scene); M.dispose(); envTex.dispose(); pmrem.dispose(); post && post.dispose();
       renderer.dispose(); renderer.domElement.remove();
     },

@@ -109,31 +109,48 @@ export function buildPercurso(M) {
   const rvCtrl = [];
   for (let t = -9; t <= 13.01; t += 1.25) { const w = 0.45 * Math.sin(t * 0.4); rvCtrl.push(V3(RC[0] + RD[0] * t + RN[0] * w, 0, RC[1] + RD[1] * t + RN[1] * w)); }
   const rvCurve = new THREE.CatmullRomCurve3(rvCtrl, false, "centripetal");
-  const NS = 320, S = [];
+  const NS = 320, S = [], SL = [];
   for (let i = 0; i <= NS; i++) {
-    const u = i / NS, p = rvCurve.getPointAt(u), tg = rvCurve.getTangentAt(u);
-    if (hyp(p.x, p.z) < edgeR(p.x, p.z) - 0.5) S.push({ p: [p.x, p.z], n: [tg.z, -tg.x], t: [tg.x, tg.z] });
+    const u = i / NS, p = rvCurve.getPointAt(u), tg = rvCurve.getTangentAt(u), rr = hyp(p.x, p.z), er = edgeR(p.x, p.z);
+    const row = { p: [p.x, p.z], n: [tg.z, -tg.x], t: [tg.x, tg.z] };
+    if (rr < er - 0.5) S.push(row);
+    if (rr < er - 0.16) SL.push(row); // a água vai até junto da borda da ilha (SL); os terraços e a ponte usam só S
   }
   const bank = (d, zMin, zMax) => S.filter((s) => s.p[1] >= zMin && s.p[1] <= zMax).map((s) => [s.p[0] + s.n[0] * d, s.p[1] + s.n[1] * d]);
   const bi = S.reduce((b, s, i) => (hyp(s.p[0] - RC[0], s.p[1] - RC[1]) < hyp(S[b].p[0] - RC[0], S[b].p[1] - RC[1]) ? i : b), 0);
   const BC = S[bi].p, BN = S[bi].n; // centro e eixo (perpendicular ao rio) da ponte
   const bAng = Math.atan2(-BN[1], BN[0]);
 
-  // fita de água (com UV: u atravessa o leito, v acompanha a corrente; a textura desliza em update)
-  const RIVER_Y = 0.06, flowTex = waterTexture(C.water);
-  const mWater = new THREE.MeshPhysicalMaterial({ color: "#FFFFFF", map: flowTex, roughness: 0.3, metalness: 0, clearcoat: 0.5, clearcoatRoughness: 0.4, envMapIntensity: 0.8 });
-  let vEnd = 0;
+  // fita de água + queda numa só malha contínua (u atravessa o leito, v acompanha a corrente; a textura desliza em update)
+  const RIVER_Y = 0.06, flowTex = waterTexture(C.water), HW = RW + 0.1;
+  const mWater = new THREE.MeshPhysicalMaterial({ color: "#FFFFFF", map: flowTex, roughness: 0.3, metalness: 0, clearcoat: 0.5, clearcoatRoughness: 0.4, envMapIntensity: 0.8, side: THREE.DoubleSide });
+  const lip = SL[SL.length - 1];
   {
-    const pos = [], nrm = [], uv = [], idx = [];
-    S.forEach((s, i) => {
-      if (i) vEnd += hyp(s.p[0] - S[i - 1].p[0], s.p[1] - S[i - 1].p[1]) / 5;
-      pos.push(s.p[0] - s.n[0] * (RW + 0.1), RIVER_Y, s.p[1] - s.n[1] * (RW + 0.1), s.p[0] + s.n[0] * (RW + 0.1), RIVER_Y, s.p[1] + s.n[1] * (RW + 0.1));
-      nrm.push(0, 1, 0, 0, 1, 0); uv.push(0, vEnd, 1, vEnd);
+    const rows = SL.map((s) => ({ c: s.p, n: s.n, y: RIVER_Y, w: HW, d: 0 }));
+    // perfil da borda: a água rola com um lábio arredondado e cai afinando-se até se desfazer
+    [[0.09, 0.03, 0.995], [0.17, -0.05, 0.98], [0.24, -0.22, 0.95], [0.29, -0.6, 0.9], [0.31, -1.2, 0.82], [0.32, -1.9, 0.68], [0.32, -2.5, 0.46], [0.32, -2.85, 0.2], [0.32, -3.05, 0.02]]
+      .forEach(([d, y, k]) => rows.push({ c: [lip.p[0] + lip.t[0] * d, lip.p[1] + lip.t[1] * d], n: lip.n, y, w: HW * k, d }));
+    const pos = [], uv = [], idx = []; let vv = 0;
+    rows.forEach((r, i) => {
+      if (i) { const q = rows[i - 1]; vv += hyp(r.c[0] - q.c[0], r.y - q.y, r.c[1] - q.c[1]) / 5; }
+      pos.push(r.c[0] - r.n[0] * r.w, r.y, r.c[1] - r.n[1] * r.w, r.c[0] + r.n[0] * r.w, r.y, r.c[1] + r.n[1] * r.w); uv.push(0, vv, 1, vv);
       if (i) { const a = (i - 1) * 2; idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3); }
     });
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute("normal", new THREE.Float32BufferAttribute(nrm, 3)); geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx);
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
     const river = P(0, 0, 0.02); river.add(mesh(geo, mWater, { cast: false }));
+  }
+  // margens baixas de barro ao longo do troço aberto (onde os terraços já acabaram), para o rio parecer escavado e não pousado no chão
+  {
+    const kerb = (side, zMin) => {
+      const pts = SL.filter((s) => s.p[1] >= zMin).map((s) => V3(s.p[0] + s.n[0] * side * (HW + 0.02), RIVER_Y + 0.045, s.p[1] + s.n[1] * side * (HW + 0.02)));
+      if (pts.length < 4) return;
+      const curve = new THREE.CatmullRomCurve3(pts, false, "centripetal"), km = M.clay(C.stone2, { rough: 0.85, bump: 0.25 });
+      const tube = mesh(new THREE.TubeGeometry(curve, Math.max(24, pts.length), 0.1, 10, false), km, { cast: false }); tube.scale.y = 0.8;
+      const kg = P(0, 0, 0.3); kg.add(tube);
+      [pts[0], pts[pts.length - 1]].forEach((q) => { const c = mesh(new THREE.SphereGeometry(0.1, 12, 10), km, { cast: false }); c.position.copy(q); c.scale.y = 0.8; kg.add(c); });
+    };
+    kerb(-1, 3.7); kerb(1, 0.5);
   }
 
   // ================= TERRAÇOS =================
@@ -237,12 +254,12 @@ export function buildPercurso(M) {
     const B = bucket(); B.box(1.5, 0.56, 0.13, mInk, [0, 0.28, 0], { r: 0.04 }); B.box(1.7, 0.08, 0.42, mStone2, [0, 0.04, 0.05], { r: 0.03 }); B.build(inner);
     const d = decal(textTexture(text, { w: 640, h: 256, size: 150 }), 1.36, 0.5); d.position.set(0, 0.3, 0.07); inner.add(d); return w;
   };
-  site(L_ISMAI[0], L_ISMAI[1], 0.15, 0, L_ISMAI[3], L_ISMAI[2], ismai);
-  site(L_EB[0], L_EB[1], 0.2, Y1, L_EB[3], L_EB[2], eb23);
-  site(L_ESC[0], L_ESC[1], 0.25, Y1, L_ESC[3], L_ESC[2], escolhas);
-  site(L_PIN[0], L_PIN[1], 0.3, Y1, L_PIN[3], L_PIN[2], pinheiro);
-  site(L_OPP[0], L_OPP[1], 0.15, Y3, L_OPP[3], L_OPP[2], opp);
-  site(L_FM[0], L_FM[1], 0.1, Y3, L_FM[3], L_FM[2], fmup);
+  const h_ismai = site(L_ISMAI[0], L_ISMAI[1], 0.15, 0, L_ISMAI[3], L_ISMAI[2], ismai);
+  const h_eb23 = site(L_EB[0], L_EB[1], 0.2, Y1, L_EB[3], L_EB[2], eb23);
+  const h_escolhas = site(L_ESC[0], L_ESC[1], 0.25, Y1, L_ESC[3], L_ESC[2], escolhas);
+  const h_pinheiro = site(L_PIN[0], L_PIN[1], 0.3, Y1, L_PIN[3], L_PIN[2], pinheiro);
+  const h_opp = site(L_OPP[0], L_OPP[1], 0.15, Y3, L_OPP[3], L_OPP[2], opp);
+  const h_fmup = site(L_FM[0], L_FM[1], 0.1, Y3, L_FM[3], L_FM[2], fmup);
   plaque(PL.ismai[0], PL.ismai[1], 0.55, 0, PL.ismai[2], "2001");
   plaque(PL.eb[0], PL.eb[1], 0.55, Y1, PL.eb[2], "2002–03");
   plaque(PL.esc[0], PL.esc[1], 0.6, Y1, PL.esc[2], "2004–09");
@@ -278,27 +295,10 @@ export function buildPercurso(M) {
   }
   const thread = [[FX, Y3 + POLE + 0.05, FZ]];
 
-  // ---- queda de água na extremidade da frente do rio ----
-  {
-    const last = S[S.length - 1], tx = last.t[0], tz = last.t[1];
-    let sLip = 0; while (sLip < 3 && hyp(last.p[0] + tx * sLip, last.p[1] + tz * sLip) < edgeR(last.p[0] + tx * sLip, last.p[1] + tz * sLip) - 0.1) sLip += 0.02;
-    const prof = [[0, RIVER_Y, 1], [sLip - 0.5, RIVER_Y, 0.98], [sLip - 0.1, -0.05, 0.8], [sLip + 0.1, -0.32, 0.72], [sLip + 0.2, -0.7, 0.68], [sLip + 0.24, -1.3, 0.62], [sLip + 0.28, -2.0, 0.5], [sLip + 0.3, -2.6, 0.3], [sLip + 0.3, -2.9, 0.08], [sLip + 0.3, -3.05, 0.01]];
-    const pos = [], uv = [], idx = []; let vv = vEnd;
-    prof.forEach(([s, y, k], i) => {
-      const px = last.p[0] + tx * s, pz = last.p[1] + tz * s, hw = (RW + 0.1) * k;
-      if (i) vv += hyp(s - prof[i - 1][0], y - prof[i - 1][1]) / 5;
-      pos.push(px - last.n[0] * hw, y, pz - last.n[1] * hw, px + last.n[0] * hw, y, pz + last.n[1] * hw); uv.push(0, vv, 1, vv);
-      if (i) { const a = (i - 1) * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
-    });
-    const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
-    const wm = mWater.clone(); wm.side = THREE.DoubleSide;
-    const fall = P(0, 0, 0.6); fall.add(mesh(geo, wm, { cast: false }));
-  }
-
   // ---- vegetação mínima ----
   const c1 = P(-6.6, -0.3, 0.7, Y1); c1.add(cypress(M, { h: 3.3, r: 0.5, seed: 3 }));
   const c2 = P(6.1, 3.1, 0.75); c2.add(cypress(M, { h: 3.1, r: 0.48, seed: 8 }));
-  const b1 = P(3.7, 4.6, 0.8); b1.add(bush(M, { s: 0.6, color: C.sage }));
+  const bp = bank(BANK + 1.05, 3.5, 3.9)[0] || [4.6, 3.7], b1 = P(bp[0], bp[1], 0.8); b1.add(bush(M, { s: 0.6, color: C.sage }));
 
   const update = (t) => {
     isl.update(t);
@@ -309,5 +309,6 @@ export function buildPercurso(M) {
     for (let i = 0; i < p.count; i++) { const x = pennantBase[i * 3], u = x / 1.9; p.setZ(i, Math.sin(u * 5.5 - t * 3.4) * 0.16 * u); p.setY(i, pennantBase[i * 3 + 1] + Math.sin(u * 4 - t * 2.6) * 0.03 * u); }
     p.needsUpdate = true; pennant.geometry.computeVertexNormals();
   };
-  return { group: g, update, pops, thread, focus: [0.4, 3.0, 0] };
+  const hot = ["ismai", "eb23", "escolhas", "pinheiro", "opp", "fmup"].map((k, i) => ({ id: "percurso." + k, obj: [h_ismai, h_eb23, h_escolhas, h_pinheiro, h_opp, h_fmup][i] }));
+  return { group: g, update, pops, thread, focus: [0.4, 3.0, 0], hot };
 }

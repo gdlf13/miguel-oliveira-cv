@@ -104,5 +104,6 @@ export function buildInicio(M) {
     const head = bust.userData.head; if (head) head.rotation.y = Math.sin(t * 0.35) * 0.05;
     core.scale.setScalar(1 + Math.sin(t * 2.6) * 0.16);
   };
-  return { group: g, update, pops, thread: [corePos], focus: [1.4, 3.0, 0] };
+  const hot = [{ id: "inicio.bust", obj: bust, ring: stage }];
+  return { group: g, update, pops, thread: [corePos], focus: [1.4, 3.0, 0], hot };
 }

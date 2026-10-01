@@ -52,6 +52,7 @@ export function ismai(grp, M) {
   B.add(ringSector(0.9, 1.45, 0.03, -1.2, 0.5, 24, 0), track, { p: [1.7, 0.0, 1.55], cast: false });
   const nameBoard = roofBoard(B, M, { x: -0.45, y: b0 + 1.6, z: 0.42, w: 1.1, h: 0.34, bg: K.blue, lines: (py) => [{ t: "ISMAI", s: py * 0.58 }] });
   B.build(grp);
+  grp.traverse((o) => { if (o.material === track) o.userData.noRing = true; }); // a pista não conta para o contorno de clique
   grp.add(nameBoard);
   const cs = contact(2.5, 0.7); cs.scale.set(1.3, 1, 1); grp.add(cs);
 }

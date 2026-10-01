@@ -1,15 +1,20 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getScenes } from "@/data/scrollWorld";
+import { getScenes, resolveHotspot } from "@/data/scrollWorld";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SEG, activeIndex, copyWeight, totalScreens } from "@/lib/world3d/timeline";
 import { useLanguage } from "./LanguageProvider";
 
 const FADE_SVH = 45; // altura do escurecimento final (tem de coincidir com .sw3__fade em globals.css)
 
 type World = { setProgress(p: number): void; jump(p: number): void; destroy(): void };
-type WorldModule = { mountWorld(el: HTMLElement, o: { reduced?: boolean; onReady?: () => void }): World };
+type WorldOpts = { reduced?: boolean; onReady?: () => void; onHover?: (id: string | null) => void; onHotspot?: (id: string) => void };
+type WorldModule = { mountWorld(el: HTMLElement, o: WorldOpts): World };
+
+const isExternal = (href: string) => /^https?:/.test(href) || href.endsWith(".pdf");
 
 function hasWebGL() {
   try {
@@ -27,7 +32,15 @@ function hasWebGL() {
  */
 export default function ScrollWorld3D() {
   const { locale } = useLanguage();
+  const router = useRouter();
+  const routerRef = useRef(router);
+  routerRef.current = router;
   const scenes = getScenes(locale);
+  const localeRef = useRef(locale);
+  localeRef.current = locale;
+  const tipRef = useRef<HTMLDivElement>(null);
+  const pointerRef = useRef({ x: 0, y: 0 });
+  const [tip, setTip] = useState<string | null>(null);
   const rootRef = useRef<HTMLElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const worldRef = useRef<World | null>(null);
@@ -65,6 +78,37 @@ export default function ScrollWorld3D() {
     setActive((prev) => (prev === a ? prev : a));
   }, []);
 
+  // clique num objecto das ilhas: secção da página, rota do site, ficheiro/site externo (novo separador) ou email
+  const openHotspot = useCallback((id: string) => {
+    const h = resolveHotspot(id, localeRef.current);
+    if (!h) return;
+    const { href } = h;
+    if (href.startsWith("#")) {
+      const el = document.querySelector(href);
+      if (!el) return;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+      history.replaceState(null, "", href);
+    } else if (href.startsWith("mailto:")) window.location.href = href;
+    else if (isExternal(href)) window.open(href, "_blank", "noopener,noreferrer");
+    else routerRef.current.push(href);
+  }, []);
+
+  // legenda que acompanha o rato por cima de um objecto clicável
+  useEffect(() => {
+    const move = (e: PointerEvent) => {
+      pointerRef.current = { x: e.clientX, y: e.clientY };
+      const el = tipRef.current;
+      if (el) el.style.transform = `translate3d(${Math.min(e.clientX + 16, window.innerWidth - el.offsetWidth - 8)}px, ${e.clientY + 18}px, 0)`;
+    };
+    window.addEventListener("pointermove", move, { passive: true });
+    return () => window.removeEventListener("pointermove", move);
+  }, []);
+  useEffect(() => {
+    const el = tipRef.current;
+    if (el && tip) el.style.transform = `translate3d(${Math.min(pointerRef.current.x + 16, window.innerWidth - el.offsetWidth - 8)}px, ${pointerRef.current.y + 18}px, 0)`;
+  }, [tip]);
+
   // monta o mundo 3D (fora da 1.ª pintura; cancela-se se o componente remontar durante a hidratação)
   useEffect(() => {
     let cancelled = false;
@@ -76,7 +120,12 @@ export default function ScrollWorld3D() {
         const mod = (await import("@/lib/world3d/index")) as unknown as WorldModule;
         if (cancelled || !hostRef.current) return;
         const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        world = mod.mountWorld(hostRef.current, { reduced, onReady: () => !cancelled && setReady(true) });
+        world = mod.mountWorld(hostRef.current, {
+          reduced,
+          onReady: () => !cancelled && setReady(true),
+          onHover: (id) => setTip(id ? resolveHotspot(id, localeRef.current)?.label ?? null : null),
+          onHotspot: openHotspot,
+        });
         worldRef.current = world;
         modeRef.current = "webgl"; setMode("webgl");
         const u = measure();
@@ -92,7 +141,7 @@ export default function ScrollWorld3D() {
       world?.destroy();
       worldRef.current = null;
     };
-  }, [apply, measure]);
+  }, [apply, measure, openHotspot]);
 
   // scroll -> progresso (aplicado logo no evento, sem depender do requestAnimationFrame)
   useEffect(() => {
@@ -153,8 +202,22 @@ export default function ScrollWorld3D() {
             <h2 id={`sw3-t-${s.id}`} className="sw3__title">{s.title}</h2>
             <p className="sw3__body">{s.body}</p>
             {s.tags.length > 0 && (
-              <ul className="sw3__tags">{s.tags.map((t) => <li key={t}>{t}</li>)}</ul>
+              <ul className="sw3__tags">
+                {s.tags.map((t, k) => {
+                  const href = s.tagLinks[k];
+                  if (!href) return <li key={t}>{t}</li>;
+                  const ext = isExternal(href);
+                  return (
+                    <li key={t} className="is-link">
+                      {href.startsWith("/") && !ext
+                        ? <Link href={href}>{t}</Link>
+                        : <a href={href} {...(ext ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{t}{ext ? " ↗" : ""}</a>}
+                    </li>
+                  );
+                })}
+              </ul>
             )}
+            {!isStatic && s.hint && <p className="sw3__clue">{s.hint}</p>}
             {s.cta && (
               <div className="sw3__cta">
                 <a className="sw3__btn sw3__btn--primary" href={s.cta.primary.href}>{s.cta.primary.label}</a>
@@ -173,6 +236,8 @@ export default function ScrollWorld3D() {
             ))}
           </nav>
         )}
+
+        {tip && <div ref={tipRef} className="sw3__tip" aria-hidden="true">{tip}</div>}
 
         {!isStatic && (
           <div ref={hintRef} className="sw3__hint" aria-hidden="true">

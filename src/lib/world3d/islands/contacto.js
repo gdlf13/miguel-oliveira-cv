@@ -292,5 +292,6 @@ export function buildContacto(M) {
       l.m.rotation.set(Math.sin(a * 1.1) * 0.35 + 0.2, a * 0.5, Math.cos(a * 0.9) * 0.3);
     });
   };
-  return { group: g, update, pops, thread: [[threadPt.x, threadPt.y, threadPt.z]] };
+  const hot = [{ id: "contacto.email", obj: [body, flapW, sealW] }, { id: "contacto.cv", obj: sheetW }, { id: "contacto.linkedin", obj: letters }, { id: "contacto.github", obj: tent }, { id: "contacto.orcid", obj: stamp }];
+  return { group: g, update, pops, thread: [[threadPt.x, threadPt.y, threadPt.z]], hot };
 }

@@ -87,6 +87,7 @@ export function buildProjectos(M) {
   const PLAZA_Y = 0.3, PR = 3.0; // altura e raio do tampo da praça
 
 
+  const hot = []; // objectos clicáveis (um por projecto)
   // ============ caminhos (faixas claras) ============
   {
     const strip = (x0, z0, x1, z1, w) => {
@@ -106,7 +107,7 @@ export function buildProjectos(M) {
   }
 
   // ============ OASIS — praça com agentes em rede (herói) ============
-  const plaza = P(PC[0], PC[1], 0.0);
+  const plaza = P(PC[0], PC[1], 0.0); hot.push({ id: "proj:oasis-social-simulation", obj: plaza });
   const hubY = 0.62, HS = 2.4; // topo do pedestal e escala da figura viva
     {
     const step = mesh(pad(PR + 0.22, 0.14, 0.05), M.clay("#E6D6B8", { rough: 0.9, bump: 0.3 })); plaza.add(step);
@@ -185,7 +186,7 @@ export function buildProjectos(M) {
 
   // ============ Tutor de Filosofia — templo ============
   {
-    const tw = P(-4.95, -0.6, 0.15), t = new THREE.Group(); tw.add(t); t.rotation.y = 0.5; t.scale.setScalar(1.1);
+    const tw = P(-4.95, -0.6, 0.15), t = new THREE.Group(); tw.add(t); hot.push({ id: "proj:tutor-filosofia", obj: tw }); t.rotation.y = 0.5; t.scale.setScalar(1.1);
     const cream = M.clay("#F6EEDE", { rough: 0.78 }), sand = M.clay("#E5D3B2", { rough: 0.85 }), sand2 = M.clay("#DCC6A0", { rough: 0.9 });
     const roofM = M.clay("#D9A88A", { rough: 0.88 }), terraM = M.clay("#B8593E", { rough: 0.85 }), ochreM = M.clay(PAL.ochre, { rough: 0.7, noBump: true }), doorM = M.clay("#6A5240", { rough: 0.8, noBump: true });
     // degraus
@@ -218,7 +219,7 @@ export function buildProjectos(M) {
 
   // ============ JogaLetras — peças com letras, ao pé do templo ============
   {
-    const jw = P(-4.15, 3.75, 0.6), tiles = [["J", "#BC6248", -0.95, -0.7, 0.2], ["O", "#3E7F89", -0.3, -0.24, -0.12], ["G", "#D9A441", 0.4, 0.2, 0.08], ["A", "#8A5878", 1.15, 0.6, -0.2]];
+    const jw = P(-4.15, 3.75, 0.6); hot.push({ id: "proj:jogaletras", obj: jw }); const tiles = [["J", "#BC6248", -0.95, -0.7, 0.2], ["O", "#3E7F89", -0.3, -0.24, -0.12], ["G", "#D9A441", 0.4, 0.2, 0.08], ["A", "#8A5878", 1.15, 0.6, -0.2]];
     const S = 0.68;
     tiles.forEach(([ch, col, x, z, rot]) => {
       const tg = new THREE.Group(); tg.position.set(x, S / 2, z); tg.rotation.y = rot; jw.add(tg);
@@ -231,7 +232,7 @@ export function buildProjectos(M) {
 
   // ============ AI Fact Checker — lente sobre folha ============
   {
-    const fw = P(4.85, -0.75, 0.25), f = new THREE.Group(); fw.add(f); f.rotation.y = -0.5; f.scale.setScalar(1.05);
+    const fw = P(4.85, -0.75, 0.25), f = new THREE.Group(); fw.add(f); hot.push({ id: "proj:ai-fact-checker", obj: fw }); f.rotation.y = -0.5; f.scale.setScalar(1.05);
     const platTop = 0.3;
     const plat = mesh(rbox(2.4, 0.3, 2.2, 0.1), M.clay("#EFE3CB", { rough: 0.85 })); plat.position.y = 0.15; f.add(plat);
     const page = new THREE.Group(); page.position.set(0, platTop, -0.5); page.rotation.x = -0.07; f.add(page);
@@ -260,7 +261,7 @@ export function buildProjectos(M) {
 
   // ============ Internet Segura — portão com escudo e fechadura ============
   {
-    const gw = P(0.2, -5.2, 0.1), gt = new THREE.Group(); gw.add(gt); gt.scale.setScalar(1.1);
+    const gw = P(0.2, -5.2, 0.1), gt = new THREE.Group(); gw.add(gt); hot.push({ id: "proj:internet-segura", obj: gw }); gt.scale.setScalar(1.1);
     const wallM = M.clay("#D6C6AA", { rough: 0.88 }), trimM = M.clay("#F3EAD8", { rough: 0.8 }), plinthM = M.clay("#E0D0B2", { rough: 0.9 });
     const plinth = mesh(rbox(4.1, 0.28, 1.5, 0.08), plinthM); plinth.position.y = 0.14; gt.add(plinth);
     const body = mesh(extrude(archShape(1.8, 2.35, 0.95, 1.9), 0.9, 0.06), wallM); body.position.y = 0.28; gt.add(body);
@@ -289,7 +290,7 @@ export function buildProjectos(M) {
   const ARC = { r: 4.9, a0: 0.36, a1: 1.27 }, aMid = (ARC.a0 + ARC.a1) / 2;
   const mx = PC[0] + Math.cos(aMid) * ARC.r, mz = PC[1] + Math.sin(aMid) * ARC.r;
   const NB = 15, BR = 0.125; // nº de barras e raio
-  const voice = P(mx, mz, 0.3);
+  const voice = P(mx, mz, 0.3); hot.push({ id: "proj:verbi-carl-rogers", obj: voice });
   const bars = [];
   {
     // pódio em arco
@@ -345,5 +346,5 @@ export function buildProjectos(M) {
   };
 
   const thread = [[PC[0], hubY + 0.9 * HS, PC[1]]];
-  return { group: g, update, pops, thread };
+  return { group: g, update, pops, thread, hot };
 }
