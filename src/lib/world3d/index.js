@@ -52,7 +52,7 @@ export function mountWorld(container, opts = {}) {
   scene.add(sun, sun.target);
   const fill = new THREE.DirectionalLight("#CFE0F0", 0.35); fill.position.set(-20, 6, -10); scene.add(fill);
 
-  const M = makeMaterials();
+  const M = makeMaterials(); M.assetBase = assetBase; // as ilhas vão buscar aqui os logótipos (public/world/logos)
 
   // ilhas
   const holders = [], updaters = [], threadPts = [], builts = [];

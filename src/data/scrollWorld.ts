@@ -178,7 +178,7 @@ export const HOTSPOTS: Record<string, Hotspot> = {
   "escrita.je": { href: latest("Jornal Económico"), label: bi("Último artigo · Jornal Económico ↗", "Latest article · Jornal Económico ↗") },
   "percurso.ismai": { href: "https://www.umaia.pt", label: bi("ISMAI · Universidade da Maia ↗", "ISMAI · University of Maia ↗") },
   "percurso.eb23": { href: "https://aetrofa.com/eb-2-3-professor-napoleao-sousa-marques/", label: bi("EB 2/3 Prof. Napoleão Sousa Marques ↗", "EB 2/3 Prof. Napoleão Sousa Marques ↗") },
-  "percurso.escolhas": { href: "https://www.acm.gov.pt/-/escolhas", label: bi("Programa Escolhas ↗", "Escolhas Programme ↗") },
+  "percurso.escolhas": { href: "https://www.programaescolhas.pt/", label: bi("Programa Escolhas ↗", "Escolhas Programme ↗") },
   "percurso.pinheiro": { href: "https://www.ebspinheiro.net/cms/", label: bi("EBS de Pinheiro ↗", "EBS Pinheiro ↗") },
   "percurso.opp": { href: "https://www.ordemdospsicologos.pt", label: bi("Ordem dos Psicólogos Portugueses ↗", "Portuguese Psychologists' Association ↗") },
   "percurso.fmup": { href: "https://med.up.pt", label: bi("FMUP · Faculdade de Medicina da U.Porto ↗", "FMUP · Faculty of Medicine, U.Porto ↗") },

@@ -108,3 +108,16 @@ export function compassTexture() {
 
 // plano com textura (alphaTest) — decalque
 export const decal = (t, w, h) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: t, roughness: 0.85, alphaTest: 0.5 }));
+
+// logótipos (ficheiros em public/world/logos/<nome>.webp: placas já compostas a partir dos logótipos públicos de cada instituição) — carregados à parte, fora do bake
+const logoLoader = new THREE.TextureLoader();
+export function logoTexture(M, name) {
+  const t = logoLoader.load(`${(M && M.assetBase) || "/world"}/logos/${name}.webp`);
+  t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+// plano sem iluminação (as cores do logótipo têm de ser fiéis), ligeiramente abaixo do branco para assentar na luz cozida da ilha
+export function logoDecal(M, name, w, h) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: logoTexture(M, name), color: "#EFEBE2" }));
+  m.userData.live = true; // fica fora do bake (a textura só carrega depois; no export ainda não existe imagem)
+  return m;
+}
